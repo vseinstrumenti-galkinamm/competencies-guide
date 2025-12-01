@@ -14,15 +14,16 @@
         :root {
             --vi-red: #d60000;
             --vi-red-dark: #b30000;
-            --vi-red-light: #ff1a1a;
+            --vi-red-light: #ff3333;
             --vi-teal: #3dd9c3;
             --vi-teal-dark: #2bb8a4;
             --vi-teal-light: #5fe3d0;
+            --vi-orange: #FF9800;
             --vi-dark: #333333;
             --vi-gray: #666666;
             --vi-light-gray: #f5f5f5;
             --vi-border: #e0e0e0;
-            --bg-main: #ffffff;
+            --bg-main: #fafafa;
             --text-primary: #333333;
             --text-secondary: #666666;
             --shadow: rgba(0, 0, 0, 0.1);
@@ -30,30 +31,64 @@
 
         body {
             font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-main);
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
             color: var(--text-primary);
             line-height: 1.6;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--vi-red) 0%, var(--vi-red-dark) 100%);
+            background: linear-gradient(135deg, var(--vi-red) 0%, var(--vi-teal) 100%);
             color: white;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
             text-align: center;
-            box-shadow: 0 4px 12px var(--shadow);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "🔧";
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.08;
+            top: 50%;
+            left: 8%;
+            transform: translateY(-50%) rotate(-15deg);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .diamond-container {
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            width: 200px;
+            height: 200px;
+            transform: translateY(-50%) rotate(-15deg);
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(61, 217, 195, 0.4));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) rotate(-15deg); }
+            50% { transform: translateY(-60%) rotate(-10deg); }
         }
 
         .header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
+            font-size: 1.3rem;
+            opacity: 0.98;
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .container {
@@ -63,24 +98,46 @@
         }
 
         .intro-block {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 3rem;
+            border-radius: 20px;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 8px var(--shadow);
-            border-left: 4px solid var(--vi-red);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .intro-block::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
         }
 
         .intro-block h2 {
-            color: var(--vi-red);
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
         }
 
         .intro-block p {
             color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.8;
+            font-size: 1.1rem;
+            line-height: 1.9;
             margin-bottom: 1rem;
         }
 
@@ -106,19 +163,21 @@
 
         .search-box {
             width: 100%;
-            padding: 1.2rem 1.5rem;
-            font-size: 1.05rem;
-            border: 2px solid var(--vi-border);
-            border-radius: 10px;
-            margin-bottom: 2.5rem;
+            padding: 1.5rem 2rem;
+            font-size: 1.1rem;
+            border: 3px solid var(--vi-border);
+            border-radius: 50px;
+            margin-bottom: 3rem;
             background: white;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .search-box:focus {
             outline: none;
-            border-color: var(--vi-red);
-            box-shadow: 0 0 0 3px rgba(214, 0, 0, 0.1);
+            border-color: var(--vi-teal);
+            box-shadow: 0 6px 20px rgba(61, 217, 195, 0.3);
+            transform: translateY(-2px);
         }
 
         /* Навигация по категориям */
@@ -127,196 +186,298 @@
         }
 
         .navigation-title {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: var(--vi-dark);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
             margin-bottom: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .category-button {
             background: white;
-            border: 2px solid var(--vi-border);
-            border-radius: 12px;
-            padding: 2rem 1.5rem;
+            border: 3px solid var(--vi-border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
-            box-shadow: 0 2px 8px var(--shadow);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .category-button:hover::before {
+            left: 100%;
         }
 
         .category-button:hover {
             border-color: var(--vi-red);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px var(--shadow);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(214, 0, 0, 0.25);
         }
 
         .category-button.active {
-            background: linear-gradient(135deg, var(--vi-red) 0%, var(--vi-red-dark) 100%);
+            background: linear-gradient(135deg, var(--vi-red) 0%, #ff4757 100%);
             border-color: var(--vi-red);
             color: white;
+            box-shadow: 0 8px 20px rgba(214, 0, 0, 0.4);
+        }
+
+        .category-button .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
         }
 
         .category-button .title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
         }
 
         .category-button .description {
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 1rem;
+            opacity: 0.85;
         }
 
         /* Метакомпетенции */
         .metas-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
             margin-bottom: 2rem;
         }
 
         .meta-button {
             background: white;
-            border: 2px solid var(--vi-border);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border: 3px solid var(--vi-border);
+            border-radius: 16px;
+            padding: 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: left;
-            box-shadow: 0 2px 8px var(--shadow);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meta-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(61, 217, 195, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .meta-button:hover::before {
+            left: 100%;
         }
 
         .meta-button:hover {
             border-color: var(--vi-teal);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px var(--shadow);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 10px 24px rgba(61, 217, 195, 0.3);
         }
 
         .meta-button.active {
-            background: linear-gradient(135deg, var(--vi-teal) 0%, var(--vi-teal-dark) 100%);
+            background: linear-gradient(135deg, var(--vi-teal) 0%, var(--vi-teal-light) 100%);
             border-color: var(--vi-teal);
             color: white;
+            box-shadow: 0 8px 20px rgba(61, 217, 195, 0.4);
+        }
+
+        .meta-button .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            display: block;
         }
 
         .meta-button .title {
-            font-size: 1.15rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         .meta-button .count {
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 0.95rem;
+            opacity: 0.85;
             margin-top: 0.5rem;
         }
 
         /* Компетенции */
         .competencies-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2rem;
             margin-bottom: 2rem;
+            align-items: start;
         }
 
         .competency-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 2px 8px var(--shadow);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
         }
 
         .competency-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px var(--shadow);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.15);
             border-color: var(--vi-red);
         }
 
         .card-header {
-            padding: 1.5rem;
-            background: linear-gradient(135deg, var(--vi-light-gray) 0%, #fff 100%);
-            border-bottom: 2px solid var(--vi-border);
+            padding: 2rem;
+            background: white;
+            border-bottom: 3px solid var(--vi-border);
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: var(--vi-red);
+            transition: width 0.4s;
+        }
+
+        .competency-card:hover .card-header::after {
+            width: 100%;
         }
 
         .card-number {
             display: inline-block;
-            background: var(--vi-red);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 6px;
+            background: white;
+            color: var(--vi-red);
+            border: 2px solid var(--vi-red);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
             font-size: 0.95rem;
             font-weight: 700;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(214, 0, 0, 0.15);
+            width: fit-content;
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.35rem;
+            font-weight: 700;
             color: var(--vi-dark);
             margin-bottom: 1rem;
+            line-height: 1.4;
+            flex-grow: 1;
         }
 
         .difficulty-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 1rem;
+            gap: 0.4rem;
+            padding: 0.4rem 0.9rem;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: fit-content;
+            opacity: 0.85;
         }
 
-        .difficulty-very-easy { background: #4CAF50; }
-        .difficulty-easy { background: #8BC34A; }
-        .difficulty-medium { background: #FFA726; }
-        .difficulty-hard { background: #FF7043; }
-        .difficulty-very-hard { background: #E53935; }
-        .difficulty-unknown { background: var(--vi-gray); }
+        .difficulty-very-easy { background: #81C784; }
+        .difficulty-easy { background: #AED581; }
+        .difficulty-medium { background: #FFB74D; }
+        .difficulty-hard { background: #FF8A65; }
+        .difficulty-very-hard { background: #E57373; }
+        .difficulty-unknown { background: #90A4AE; }
 
         .card-body {
-            padding: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-description {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin-bottom: 1rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
             font-style: italic;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border-radius: 10px;
+            border-left: 4px solid var(--vi-teal);
+            min-height: 80px;
         }
 
         .card-expanded {
             display: none;
             margin-top: 1.5rem;
             padding-top: 1.5rem;
-            border-top: 2px solid var(--vi-light-gray);
+            border-top: 3px dashed var(--vi-light-gray);
         }
 
         .card-expanded.show {
             display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .description-section {
             margin-bottom: 2rem;
+            padding: 1.5rem;
+            padding-left: 2rem;
+            background: transparent;
+            border-radius: 12px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: -8px 0 16px rgba(76, 175, 80, 0.15);
         }
 
         .description-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: #4CAF50;
+            gap: 0.6rem;
+            color: #2E7D32;
         }
 
         .description-content ul {
@@ -325,41 +486,53 @@
         }
 
         .description-content li {
-            padding: 0.6rem 0;
-            padding-left: 2rem;
+            padding: 0.7rem 0;
+            padding-left: 2.5rem;
             position: relative;
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.7;
         }
 
         .description-content li:before {
-            content: "✓";
+            content: "✨";
             position: absolute;
             left: 0;
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .info-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            padding-left: 2rem;
+            background: transparent;
+            border-radius: 12px;
+            border-left: 5px solid var(--vi-red);
+            box-shadow: -8px 0 16px rgba(214, 0, 0, 0.15);
+        }
+
+        .info-section.no-shadow {
+            background: white;
+            border: 2px solid var(--vi-light-gray);
+            border-left: 2px solid var(--vi-light-gray);
+            box-shadow: none;
+            padding-left: 1.5rem;
         }
 
         .info-title {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--vi-dark);
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
 
         .info-content {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.7;
+            font-size: 1rem;
+            line-height: 1.8;
         }
 
         .info-content ul {
@@ -368,51 +541,62 @@
         }
 
         .info-content li {
-            padding: 0.5rem 0;
-            padding-left: 1.8rem;
+            padding: 0.7rem 0;
+            padding-left: 2rem;
             position: relative;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .info-content li:before {
-            content: "•";
+            content: "▸";
             position: absolute;
-            left: 0.3rem;
+            left: 0;
             color: var(--vi-red);
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .empty-placeholder {
             color: #999;
             font-style: italic;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
         }
 
         .reading-list {
-            background: var(--vi-light-gray);
-            padding: 1rem;
-            border-radius: 8px;
-            max-height: 300px;
+            background: linear-gradient(135deg, #FFF9E6, #FFF3CD);
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-height: 320px;
             overflow-y: auto;
+            border: 2px solid #FFE082;
         }
 
         .reading-item {
-            padding: 0.6rem 0;
-            font-size: 0.9rem;
+            padding: 0.8rem 0;
+            font-size: 0.95rem;
             color: var(--text-secondary);
-            border-bottom: 1px solid var(--vi-border);
-            line-height: 1.5;
+            border-bottom: 1px solid #FFE082;
+            line-height: 1.6;
         }
 
         .reading-item:last-child {
             border-bottom: none;
         }
 
+        .reading-item::before {
+            content: "📖 ";
+            margin-right: 0.5rem;
+        }
+
         .reading-item a {
             color: var(--vi-red);
             text-decoration: none;
-            border-bottom: 1px solid transparent;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
             transition: border-color 0.3s;
         }
 
@@ -424,25 +608,30 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            margin-top: 0.5rem;
-            padding: 0.7rem 1.3rem;
-            background: var(--vi-red);
-            color: white;
-            border: none;
+            margin-top: auto;
+            padding: 0.6rem 1.2rem;
+            background: white;
+            color: var(--vi-red);
+            border: 2px solid var(--vi-red);
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(214, 0, 0, 0.15);
+            width: fit-content;
         }
 
         .expand-btn:hover {
-            background: var(--vi-red-dark);
+            background: var(--vi-red);
+            color: white;
             transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(214, 0, 0, 0.25);
         }
 
         .expand-btn .icon {
             transition: transform 0.3s ease;
+            font-size: 1rem;
         }
 
         .expand-btn.expanded .icon {
@@ -456,36 +645,50 @@
         .breadcrumbs {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             margin-bottom: 2rem;
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--vi-gray);
             flex-wrap: wrap;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .breadcrumbs span {
             cursor: pointer;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
         }
 
         .breadcrumbs span:hover {
             color: var(--vi-red);
+            background: #fff0f0;
         }
 
         .breadcrumbs .separator {
-            color: var(--vi-border);
+            color: var(--vi-teal);
             cursor: default;
+            font-weight: bold;
         }
 
         .breadcrumbs .current {
             color: var(--vi-red);
-            font-weight: 600;
+            font-weight: 700;
             cursor: default;
+            background: #fff0f0;
         }
 
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+
+            .diamond-container {
+                width: 120px;
+                height: 120px;
             }
 
             .categories-grid,
@@ -493,19 +696,122 @@
             .competencies-grid {
                 grid-template-columns: 1fr;
             }
+
+            .category-button .emoji {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Scrollbar styling - для всей страницы */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vi-teal), var(--vi-red));
+        }
+
+        /* Scrollbar для блока литературы - обычный серый */
+        .reading-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .reading-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .reading-list::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 10px;
+        }
+
+        .reading-list::-webkit-scrollbar-thumb:hover {
+            background: #999;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🔧 Модель компетенций</h1>
+        <h1>Модель компетенций</h1>
         <p>Гайд по развитию личностных компетенций в ВсеИнструменты.ру</p>
+        
+        <!-- SVG алмаз -->
+        <div class="diamond-container">
+            <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Основные градиенты -->
+                    <linearGradient id="teal1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#2bb8a4;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#3dd9c3;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#5fe3d0;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="teal2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a8875;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2bb8a4;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="teal3" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#3dd9c3;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#7eecd9;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="teal4" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#5fe3d0;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2bb8a4;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Верхняя площадка (table) -->
+                <polygon points="100,30 140,70 100,55 60,70" fill="url(#teal3)" opacity="0.95"/>
+                
+                <!-- Левая верхняя грань -->
+                <polygon points="100,30 60,70 20,70 50,35" fill="url(#teal1)" opacity="0.85"/>
+                
+                <!-- Правая верхняя грань -->
+                <polygon points="100,30 140,70 180,70 150,35" fill="url(#teal2)" opacity="0.9"/>
+                
+                <!-- Левая боковая грань -->
+                <polygon points="20,70 60,70 40,120 25,100" fill="url(#teal2)" opacity="0.8"/>
+                
+                <!-- Правая боковая грань -->
+                <polygon points="180,70 140,70 160,120 175,100" fill="url(#teal1)" opacity="0.75"/>
+                
+                <!-- Передняя левая грань (от пояса к павильону) -->
+                <polygon points="60,70 100,55 100,110 40,120" fill="url(#teal4)" opacity="0.9"/>
+                
+                <!-- Передняя правая грань (от пояса к павильону) -->
+                <polygon points="140,70 100,55 100,110 160,120" fill="url(#teal3)" opacity="0.85"/>
+                
+                <!-- Нижняя левая грань (павильон) -->
+                <polygon points="40,120 100,110 100,160 25,100" fill="url(#teal1)" opacity="0.95"/>
+                
+                <!-- Нижняя правая грань (павильон) -->
+                <polygon points="160,120 100,110 100,160 175,100" fill="url(#teal2)" opacity="0.9"/>
+                
+                <!-- Острие (culet) -->
+                <polygon points="25,100 100,160 175,100 100,110" fill="url(#teal2)" opacity="0.85"/>
+                
+                <!-- Блики для реалистичности -->
+                <ellipse cx="75" cy="45" rx="20" ry="12" fill="white" opacity="0.7"/>
+                <ellipse cx="130" cy="85" rx="15" ry="8" fill="white" opacity="0.5"/>
+                <ellipse cx="95" cy="65" rx="10" ry="6" fill="white" opacity="0.6"/>
+            </svg>
+        </div>
     </div>
 
     <div class="container">
         <!-- Блок "Что такое компетенции?" -->
         <div class="intro-block">
-            <h2>Что такое компетенции?</h2>
+            <h2>✨ Что такое компетенции?</h2>
             <p><strong>Компетенции</strong> (soft skills) — это поведение человека на работе, которое повышает вероятность успеха независимо от роли и профессии. Это то, как вы работаете с людьми, принимаете решения, справляетесь с вызовами и развиваетесь.</p>
             <p>В этом гайде представлены 32 ключевые компетенции, сгруппированные по 4 категориям, с практичными рекомендациями по развитию и рекомендованной литературой.</p>
         </div>
@@ -521,7 +827,7 @@
             type="text" 
             class="search-box" 
             id="searchBox" 
-            placeholder="🔍 Поиск компетенций по названию..."
+            placeholder="🔍 Найти свою идеальную компетенцию..."
         >
 
         <!-- Хлебные крошки -->
@@ -537,6 +843,12 @@
         let currentView = 'categories';
         let selectedCategory = null;
         let selectedMeta = null;
+
+        // Эмодзи для категорий
+        const categoryEmojis = ['🎯', '⚡', '💬', '🌟'];
+        
+        // Эмодзи для метакомпетенций с правильным смыслом
+        const metaEmojisMap = {"Аналитика и прогнозирование": "📊", "Управление изменениями": "🔄", "Достижение результата": "🎯", "Управление людьми": "👥", "Управление системой": "⚙️", "Внутренняя коммуникация": "💬", "Внешняя и клиентская коммуникация": "🤝", "Саморазвитие": "🌱", "Этические нормы": "⚖️"};
 
         function getDifficultyClass(difficulty) {
             if (!difficulty) return 'difficulty-unknown';
@@ -555,6 +867,12 @@
             return 'difficulty-unknown';
         }
 
+        function formatDifficulty(difficulty) {
+            if (!difficulty) return 'Сложность не указана';
+            // Убираем текст "- невозможно развить" если есть
+            return difficulty.replace(/\s*-\s*невозможно развить/i, '');
+        }
+
         function updateBreadcrumbs() {
             const breadcrumbs = document.getElementById('breadcrumbs');
             
@@ -564,16 +882,16 @@
             }
 
             breadcrumbs.classList.remove('section-hidden');
-            let html = '<span onclick="showCategories()">Все категории</span>';
+            let html = '<span onclick="showCategories()">🏠 Все категории</span>';
 
             if (selectedCategory !== null) {
                 const cat = competenciesData.categories[selectedCategory];
                 html += ' <span class="separator">→</span> ';
                 
                 if (currentView === 'metas') {
-                    html += `<span class="current">${cat.name}</span>`;
+                    html += `<span class="current">${categoryEmojis[selectedCategory]} ${cat.name}</span>`;
                 } else {
-                    html += `<span onclick="showMetas(${selectedCategory})">${cat.name}</span>`;
+                    html += `<span onclick="showMetas(${selectedCategory})">${categoryEmojis[selectedCategory]} ${cat.name}</span>`;
                 }
             }
 
@@ -593,7 +911,7 @@
             
             const container = document.getElementById('navigationContainer');
             container.innerHTML = `
-                <div class="navigation-title">Выберите категорию компетенций:</div>
+                <div class="navigation-title">🎨 Выберите категорию компетенций</div>
                 <div class="categories-grid" id="categoriesGrid"></div>
             `;
 
@@ -606,8 +924,9 @@
                 button.className = 'category-button';
                 button.onclick = () => showMetas(index);
                 button.innerHTML = `
+                    <span class="emoji">${categoryEmojis[index]}</span>
                     <div class="title">${category.name}</div>
-                    <div class="description">${totalComps} компетенций</div>
+                    <div class="description">${totalComps} компетенций для роста</div>
                 `;
                 grid.appendChild(button);
             });
@@ -624,17 +943,20 @@
             const container = document.getElementById('navigationContainer');
             
             container.innerHTML = `
-                <div class="navigation-title">Выберите метакомпетенцию:</div>
+                <div class="navigation-title">🚀 Выберите метакомпетенцию</div>
                 <div class="metas-grid" id="metasGrid"></div>
             `;
 
             const grid = document.getElementById('metasGrid');
             
             category.metas.forEach((meta, index) => {
+                const emoji = metaEmojisMap[meta.name] || '📌';
+                
                 const button = document.createElement('div');
                 button.className = 'meta-button';
                 button.onclick = () => showCompetencies(categoryIndex, index);
                 button.innerHTML = `
+                    <span class="emoji">${emoji}</span>
                     <div class="title">${meta.name}</div>
                     <div class="count">${meta.competencies.length} компетенций</div>
                 `;
@@ -653,6 +975,7 @@
             const container = document.getElementById('navigationContainer');
             
             container.innerHTML = `
+                <div class="navigation-title">⭐ ${meta.name}</div>
                 <div class="competencies-grid" id="competenciesGrid"></div>
             `;
 
@@ -671,7 +994,7 @@
             card.dataset.name = comp.name.toLowerCase();
 
             const difficultyClass = getDifficultyClass(comp.difficulty);
-            const difficultyText = comp.difficulty || 'Сложность не указана';
+            const difficultyText = formatDifficulty(comp.difficulty);
 
             card.innerHTML = `
                 <div class="card-header">
@@ -682,9 +1005,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="card-description">Скоро будет добавлено</div>
+                    <div class="card-description">💭 Скоро будет добавлено краткое описание</div>
                     <button class="expand-btn" onclick="toggleCard(this)">
-                        <span>Подробнее</span>
+                        <span>Узнать больше</span>
                         <span class="icon">▼</span>
                     </button>
                     <div class="card-expanded">
@@ -704,7 +1027,7 @@
 
             return `
                 <div class="description-section">
-                    <div class="description-title">✅ Развито</div>
+                    <div class="description-title">✅ Когда компетенция развита</div>
                     <div class="description-content">
                         <ul>
                             ${comp.description.map(item => `<li>${item}</li>`).join('')}
@@ -723,7 +1046,7 @@
                             <ul>
                                 ${comp.development.map(item => `<li>${item}</li>`).join('')}
                             </ul>
-                        ` : '<p class="empty-placeholder">Скоро будет добавлено</p>'}
+                        ` : '<p class="empty-placeholder">🌱 Скоро здесь появятся практичные советы</p>'}
                     </div>
                 </div>
             `;
@@ -731,7 +1054,7 @@
 
         function renderLiterature(comp) {
             return `
-                <div class="info-section">
+                <div class="info-section no-shadow">
                     <div class="info-title">📚 Рекомендованная литература</div>
                     ${comp.literature.length > 0 ? `
                         <div class="reading-list">
@@ -741,22 +1064,22 @@
                                     if (urlMatch) {
                                         const url = urlMatch[0];
                                         const text = item.replace(url, '').trim().replace(/^-\s*/, '');
-                                        return `<div class="reading-item">${text ? text + ' - ' : ''}<a href="${url}" target="_blank">${url}</a></div>`;
+                                        return `<div class="reading-item">${text ? text + ' - ' : ''}<a href="${url}" target="_blank">Перейти</a></div>`;
                                     }
                                 }
                                 return `<div class="reading-item">${item}</div>`;
                             }).join('')}
                         </div>
-                    ` : '<p class="empty-placeholder">Скоро будет добавлено</p>'}
+                    ` : '<p class="empty-placeholder">📖 Книги и курсы скоро появятся</p>'}
                 </div>
             `;
         }
 
         function renderCompensation() {
             return `
-                <div class="info-section">
+                <div class="info-section no-shadow">
                     <div class="info-title">🔄 Компенсаторные компетенции</div>
-                    <p class="empty-placeholder">Скоро будет добавлено</p>
+                    <p class="empty-placeholder">🎯 Скоро здесь будут альтернативные компетенции</p>
                 </div>
             `;
         }
@@ -768,7 +1091,7 @@
             expanded.classList.toggle('show');
             button.classList.toggle('expanded');
             button.querySelector('span:first-child').textContent = 
-                expanded.classList.contains('show') ? 'Скрыть' : 'Подробнее';
+                expanded.classList.contains('show') ? 'Скрыть' : 'Узнать больше';
         }
 
         function initSearch() {
@@ -809,7 +1132,7 @@
                     
                     const container = document.getElementById('navigationContainer');
                     container.innerHTML = `
-                        <div class="navigation-title">Результаты поиска (${results.length}):</div>
+                        <div class="navigation-title">🔍 Найдено: ${results.length} ${results.length === 1 ? 'компетенция' : 'компетенций'}</div>
                         <div class="competencies-grid" id="searchResults"></div>
                     `;
                     
