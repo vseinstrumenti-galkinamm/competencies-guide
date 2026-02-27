@@ -1,988 +1,1026 @@
-<!DOCTYPE html>  
-<html lang="ru">  
-<head>  
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Модель компетенций | ВсеИнструменты.ру</title>  
-    <style>  
-        * { 
-            margin: 0;  
-            padding: 0;  
-            box-sizing: border-box;  
-        } 
- 
-        :root {  
-            --vi-red: #d60000;  
-            --vi-teal: #3dd9c3;  
-            --vi-dark: #333333;  
-            --vi-gray: #666666;  
-            --vi-light-gray: #f5f5f5;  
-            --vi-border: #e0e0e0;  
-        } 
- 
-        body {  
-            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;  
-            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);  
-            color: var(--vi-dark);  
-            line-height: 1.6;  
-        } 
- 
-        .header {  
-            background: linear-gradient(135deg, var(--vi-red) 0%, var(--vi-teal) 100%);  
-            color: white;  
-            padding: 4rem 2rem;  
-            text-align: center;  
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);  
-            position: relative;  
-            overflow: hidden;  
-        } 
- 
-        .header::before {  
-            content: " 🔧"; 
-            position: absolute;  
-            font-size: 20rem;  
-            opacity: 0.08;  
-            top: 50%;  
-            left: 8%;  
-            transform: translateY(-50%) rotate(-15deg);  
-            animation: floatUp 6s ease-in-out infinite;  
-        } 
- 
-        .diamond-container {  
-            position: absolute;  
-            top: 50%;  
-            right: 8%;  
-            width: 200px;  
-            height: 200px;  
-            transform: translateY(-50%) rotate(-15deg);  
-            animation: floatDown 6s ease-in-out infinite;  
-            filter: drop-shadow(0 10px 30px rgba(61, 217, 195, 0.4));  
-            opacity: 0.15;  
-        } 
- 
-        @keyframes floatUp {  
-            0%, 100% { transform: translateY(-50%) rotate(-15deg); }  
-            50% { transform: translateY(-60%) rotate(-10deg); }  
-        } 
- 
-        @keyframes floatDown {  
-            0%, 100% { transform: translateY(-50%) rotate(-15deg); }  
-            50% { transform: translateY(-40%) rotate(-20deg); }  
-        } 
- 
-        .header h1 {  
-            font-size: 3rem;  
-            font-weight: 800;  
-            margin-bottom: 1rem;  
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);  
-            position: relative;  
-            z-index: 1;  
-        } 
- 
-        .header p {  
-            font-size: 1.3rem;  
-            opacity: 0.98;  
-            max-width: 800px;  
-            margin: 0 auto;  
-            position: relative;  
-            z-index: 1;  
-        } 
- 
-        .container {  
-            max-width: 1200px;  
-            margin: 0 auto;  
-            padding: 2rem;  
-        } 
- 
-        .intro-block {  
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);  
-            padding: 3rem;  
-            border-radius: 20px;  
-            margin-bottom: 2rem;  
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);  
-            border: 3px solid transparent;  
-            background-clip: padding-box;  
-            position: relative;  
-        } 
- 
-        .intro-block::before {  
-            content: "";  
-            position: absolute;  
-            top: 0;  
-            left: 0;  
-            right: 0;  
-            bottom: 0;  
-            border-radius: 20px;  
-            padding: 3px;  
-            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));  
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);  
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);  
-            -webkit-mask-composite: xor;  
-            mask-composite: exclude;  
-            z-index: -1; 
-        } 
- 
-        .intro-block h2 {  
-            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));  
-            -webkit-background-clip: text;  
-            -webkit-text-fill-color: transparent;  
-            margin-bottom: 1.5rem;  
-            font-size: 2rem;  
-            font-weight: 700;  
-        } 
- 
-        .intro-block p {  
-            color: var(--vi-gray);  
-            font-size: 1.1rem;  
-            line-height: 1.9;  
-            margin-bottom: 1rem;  
-        } 
- 
-        .search-box {  
-            width: 100%;  
-            padding: 1.5rem 2rem;  
-            font-size: 1.1rem;  
-            border: 3px solid var(--vi-border);  
-            border-radius: 50px;  
-            margin-bottom: 3rem;  
-            background: white;  
-            transition: all 0.3s ease;  
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);  
-        } 
- 
-        .search-box:focus {  
-            outline: none;  
-            border-color: var(--vi-teal);  
-            box-shadow: 0 6px 20px rgba(61, 217, 195, 0.3);  
-            transform: translateY(-2px);  
-        } 
- 
-        .navigation-title {  
-            font-size: 1.5rem;  
-            font-weight: 700;  
-            color: var(--vi-dark);  
-            margin-bottom: 2rem;  
-            text-align: center;  
-        } 
- 
-        .groups-grid {  
-            display: grid;  
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));  
-            gap: 2rem;  
-            margin-bottom: 2rem;  
-        } 
- 
-        .group-button {  
-            background: white;  
-            border: 3px solid var(--vi-border);  
-            border-radius: 20px;  
-            padding: 2.5rem 2rem;  
-            cursor: pointer;  
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);  
-            text-align: center;  
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);  
-            position: relative;  
-            overflow: hidden;  
-        } 
- 
-        .group-button::before {  
-            content: "";  
-            position: absolute;  
-            top: 0;  
-            left: -100%;  
-            width: 100%;  
-            height: 100%;  
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);  
-            transition: left 0.5s;  
-        } 
- 
-        .group-button:hover::before {  
-            left: 100%;  
-        } 
- 
-        .group-button:hover {  
-            border-color: var(--vi-red);  
-            transform: translateY(-8px) scale(1.02);  
-            box-shadow: 0 12px 28px rgba(214, 0, 0, 0.25);  
-        } 
- 
-        .group-button .emoji {  
-            font-size: 3.5rem;  
-            margin-bottom: 1rem;  
-            display: block;  
-        } 
- 
-        .group-button .title {  
-            font-size: 1.4rem;  
-            font-weight: 700;  
-            margin-bottom: 1rem;  
-            color: var(--vi-dark);  
-        } 
- 
-        .group-button .description {  
-            font-size: 0.95rem;  
-            opacity: 0.8;  
-            line-height: 1.6;  
-            color: var(--vi-gray);  
-        } 
- 
-        .group-button .count {  
-            font-size: 0.9rem;  
-            opacity: 0.7;  
-            margin-top: 0.8rem;  
-            color: var(--vi-teal);  
-            font-weight: 600;  
-        } 
- 
-        .competencies-grid {  
-            display: grid;  
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));  
-            gap: 2rem;  
-            margin-bottom: 2rem;  
-            align-items: start;  
-        } 
- 
-        .competency-card {  
-            background: white;  
-            border-radius: 16px;  
-            overflow: hidden;  
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);  
-            transition: all 0.3s ease;  
-            cursor: pointer;  
-            border: 3px solid transparent;  
-            display: flex;  
-            flex-direction: column;  
-            height: fit-content;  
-        }  
-        .competency-card:hover {  
-            transform: translateY(-8px);  
-            box-shadow: 0 16px 32px rgba(0,0,0,0.15);  
-            border-color: var(--vi-red);  
-        } 
- 
-        .card-header {  
-            padding: 2rem;  
-            background: white;  
-            border-bottom: 3px solid var(--vi-border);  
-            position: relative;  
-            min-height: 180px;  
-            display: flex;  
-            flex-direction: column;  
-        } 
- 
-        .card-header::after {  
-            content: "";  
-            position: absolute;  
-            bottom: -3px;  
-            left: 0;  
-            width: 30%;  
-            height: 3px;  
-            background: var(--vi-red);  
-            transition: width 0.4s;  
-        } 
- 
-        .competency-card:hover .card-header::after {  
-            width: 100%;  
-        } 
- 
-         .card-number {  
-            display: inline-block;  
-            background: white;  
-            color: var(--vi-red);  
-            border: 2px solid var(--vi-red);  
-            padding: 0.4rem 0.9rem;  
-            border-radius: 8px;  
-            font-size: 0.95rem;  
-            font-weight: 700;  
-            margin-bottom: 1rem;  
-            box-shadow: 0 2px 6px rgba(214, 0, 0 , 0.15);  
-            width: fit-content;  
-        } 
- 
-        .card-title {  
-            font-size: 1.35rem;  
-            font-weight: 700;  
-            color: var(--vi-dark);  
-            margin-bottom: 1rem;  
-            line-height: 1.4;  
-            flex-grow: 1; 
-        } 
- 
-        .difficulty-badge {  
-            display: inline-flex;  
-            align-items: center;  
-            gap: 0.4rem;  
-            padding: 0.4rem 0.9rem;  
-            border-radius: 8px;  
-            font-weight: 600;  
-            font-size: 0.85rem;  
-            color: white;  
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);  
-            width: fit-content;  
-            opacity: 0.85;  
-        } 
- 
-        .difficulty-very-easy { background: #81C784; }  
-        .difficulty-easy { background: #AED581; }  
-        .difficulty-medium { background: #FFB74D; }  
-        .difficulty-hard { background: #FF8A65; }  
-        .difficulty-very-hard { background: #E57373; }  
-        .difficulty-unknown { background: #90A4AE; } 
- 
-        .card-body {  
-            padding: 2rem;  
-            display: flex;  
-            flex-direction: column;  
-        } 
- 
-        .card-expanded {  
-            display: none;  
-            margin-top: 1.5rem;  
-            padding-top: 1.5rem;  
-            border-top: 3px dashed var(--vi-light-gray);  
-        } 
- 
-        .card-expanded.show {  
-            display: block;  
-            animation: slideDown 0.4s ease;  
-        } 
- 
-        @keyframes slideDown {  
-            from { opacity: 0; transform: translateY(-10px); }              
-            to { opacity: 1; transform: translateY(0); }  
-        } 
- 
-        .description-section {  
-            margin-bottom: 2rem;  
-            padding: 1.5rem;  
-            padding-left: 2rem;  
-            background: transparent;  
-            border-radius: 12px;  
-            border-left: 5px solid #4CAF50;  
-            box-shadow: -8px 0 16px rgba(76, 175, 80, 0.15);  
-        } 
- 
-        .info-section {  
-            margin-bottom: 2rem;  
-            padding: 1.5rem;  
-            padding-left: 2rem;  
-            background: transparent;  
-            border-radius: 12px;  
-            border-left: 5px solid var(--vi-red);  
-            box-shadow: -8px 0 16px rgba(214, 0, 0, 0.15);  
-        } 
- 
-        .info-section.no-shadow {  
-            background: white;  
-            border: 2px solid var(--vi-light-gray);  
-            border-left: 2px solid var(--vi-light-gray);  
-            box-shadow: none;  
-            padding-left: 1.5rem;  
-        } 
- 
-        .info-title {  
-            font-weight: 700;  
-            color: var(--vi-dark);  
-            margin-bottom: 1rem;  
-            font-size: 1.1rem;  
-            display: flex;  
-            align-items: center;  
-            gap: 0.6rem;  
-        } 
- 
-        .info-content {  
-            color: var(--vi-gray);  
-            font-size: 1rem;  
-            line-height: 1.8;  
-        } 
- 
-        .info-content ul {  
-            list-style: none;  
-            padding-left: 0;  
-        } 
- 
-        .info-content li {  
-            padding: 0.7rem 0;  
-            padding-left: 2rem;  
-            position: relative;  
-            line-height: 1.7;  
-        } 
- 
-        .info-content li:before {  
-            content: " ▸"; 
-            position: absolute;  
-            left: 0;  
-            color: var(--vi-red);  
-            font-weight: bold;  
-            font-size: 1.2rem;  
-        } 
- 
-        .description-section .info-content li:before {  
-            content: " ✨"; 
-            font-size: 1rem;  
-        } 
- 
-        .reading-list {  
-            background: linear-gradient(135deg, #FFF9E6, #FFF3CD);  
-            padding: 1.5rem;  
-            border-radius: 12px;  
-            max-height: 320px;  
-            overflow-y: auto;  
-            border: 2px solid #FFE082;  
-        } 
- 
-        .reading-item { 
-            padding: 0.8rem 0;  
-            font-size: 0.95rem;  
-            color: var(--vi-gray);  
-            border-bottom: 1px solid #FFE082;  
-            line-height: 1.6;  
-        } 
- 
-        .reading-item:last-child {  
-            border-bottom: none;  
-        } 
- 
-        .reading-item::before {  
-            content: " 📖 ";             
-            margin-right: 0.5rem;  
-        } 
- 
-        .reading-item a {  
-            color: var(--vi-red);  
-            text-decoration: none;  
-            font-weight: 600;  
-            border-bottom: 2px solid transparent;  
-            transition: all 0.3s;  
-        } 
- 
-        .reading-item a:hover {  
-            border-bottom-color: var(--vi-red);  
-            color: var(--vi-red);  
-        } 
- 
-        .reading-list::-webkit-scrollbar {  
-            width: 8px;  
-        } 
- 
-        .reading-list::-webkit-scrollbar-track {  
-            background: #f1f1f1;  
-            border-radius: 10px;  
-        } 
- 
-        .reading-list::-webkit-scrollbar-thumb {  
-            background: #bbb;  
-            border-radius: 10px;  
-        } 
- 
-        .reading-list::-webkit-scrollbar-thumb:hover {  
-            background: #999;  
-        } 
- 
-        .expand-btn {  
-            display: inline-flex;  
-            align-items: center;  
-            gap: 0.5rem;  
-            margin-top: auto;  
-            padding: 0.6rem 1.2rem;  
-            background: white;  
-            color: var(--vi-red);  
-            border: 2px solid var(--vi-red);  
-            border-radius: 8px;  
-            cursor: pointer;  
-            font-size: 0.9rem;  
-            font-weight: 600;  
-            transition: all 0.3s ease;  
-            box-shadow: 0 2px 6px rgba(214, 0, 0, 0.15);  
-            width: fit-content;  
-        } 
- 
-        .expand-btn:hover {  
-            background: var(--vi-red);  
-            color: white;  
-            transform: translateY(-2px);  
-            box-shadow: 0 4px 10px rgba(214, 0, 0, 0.25);  
-        } 
- 
-        .expand-btn .icon {  
-            transition: transform 0.3s ease;  
-            font-size: 1rem;  
-        } 
- 
-        .expand-btn.expanded .icon {  
-            transform: rotate(180deg);  
-        } 
- 
-        .section-hidden {  
-            display: none;  
-        } 
- 
-        .breadcrumbs {  
-            display: flex;  
-            align-items: center;  
-            gap: 0.6rem;  
-            margin-bottom: 2rem;  
-            font-size: 1.05rem;  
-            color: var(--vi-gray);  
-            flex-wrap: wrap;  
-            padding: 1rem 1.5rem;  
-            background: white;  
-            border-radius: 12px;  
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);  
-        } 
- 
-        .breadcrumbs span {  
-            cursor: pointer;  
-            transition: all 0.3s;  
-            padding: 0.3rem 0.6rem;  
-            border-radius: 6px;  
-        } 
- 
-        .breadcrumbs span:hover {  
-            color: var(--vi-red);  
-            background: #fff0f0;  
-        } 
- 
-        .breadcrumbs .separator {  
-            color: var(--vi-teal);  
-            cursor: default;  
-            font-weight: bold;  
-        } 
- 
-        .breadcrumbs .current {  
-            color: var(--vi-red);  
-            font-weight: 700;  
-            cursor: default;  
-            background: #fff0f0;  
-        } 
- 
-        @media (max-width: 768px) {  
-            .header h1 {  
-                font-size: 2.2rem;  
-            } 
- 
-            .diamond-container {  
-                width: 120px;  
-                height: 120px;  
-            } 
- 
-            .groups-grid,  
-            .competencies-grid {  
-                grid-template-columns: 1fr;  
-            } 
- 
-            .group-button .emoji {  
-                font-size: 2.5rem;  
-            } 
-        } 
- 
-        ::-webkit-scrollbar {  
-            width: 10px;  
-        } 
- 
-        ::-webkit-scrollbar-track {  
-            background: #f1f1f1;  
-            border-radius: 10px;  
-        } 
- 
-        ::-webkit-scrollbar-thumb {  
-            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));  
-            border-radius: 10px;  
-        } 
- 
-        ::-webkit-scrollbar-thumb:hover {  
-            background: linear-gradient(135deg, var(--vi-teal), var(--vi-red));  
-        } 
- 
-        .floating-back-button {  
-            position: fixed;  
-            bottom: 2rem;  
-            left: 2rem;  
-            width: 70px;  
-            height: 45px;  
-            background: white;  
-            border: 2px solid var(--vi-border);  
-            border-radius: 22px;  
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  
-            cursor: pointer;  
-            display: none;  
-            align-items: center;  
-            justify-content: center;  
-            font-size: 2rem;  
-            line-height: 0.5;  
-            padding-bottom: 6px;  
-            transition: all 0.3s ease;  
-            z-index: 1000;  
-            opacity: 0.7;  
-        } 
- 
-        .floating-back-button:hover {  
-            opacity: 1;  
-            transform: scale(1.1);  
-            border-color: var(--vi-red);  
-            box-shadow: 0 6px 20px rgba(214, 0, 0, 0.25);  
-        } 
- 
-        .floating-back-button.show {  
-            display: flex;  
-            animation: fadeInUp 0.4s ease;  
-        } 
- 
-        @keyframes fadeInUp {  
-            from {  
-                opacity: 0;  
-                transform: translateY(20px);  
-            }  
-            to {  
-                opacity: 0.7;  
-                transform: translateY(0);  
-            }  
-        } 
- 
-        @media (max-width: 768px) {  
-            .floating-back-button {  
-                bottom: 1rem;  
-                left: 1rem;  
-                width: 60px;  
-                height: 40px;  
-                border-radius: 20px;  
-                font-size: 1.7rem;  
-            } 
-        } 
-    </style>  
-</head>  
-<body>  
-    <div class="header">  
-        <h1>Модель компетенций</h1>  
-        <p>Гайд по развитию личностных компетенций в ВсеИнструменты.ру</p>  
-         
-        <div class="diamond-container">  
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">  
-                <defs>  
-                    <linearGradient id="facet1" x1="0%" y1="0%" x2="100%" y2="100%">  
-                        <stop offset="0%" style="stop-color:#4dd9c6;stop-opacity:1" />  
-                        <stop offset="100%" style="stop-color:#2fb8a4;stop-opacity:1" />  
-                    </linearGradient>  
-                    <linearGradient id="facet2" x1="100%" y1="0%" x2="0%" y2="100%">  
-                        <stop offset="0%" style="stop-color:#6ee8d5;stop-opacity:1" />  
-                        <stop offset="100%" style="stop-color:#3dd9c3;stop-opacity:1" />  
-                    </linearGradient>  
-                    <linearGradient id="facet3" x1="0%" y1="100%" x2="100%" y2="0%">  
-                        <stop offset="0%" style="stop-color:#2fb8a4;stop-opacity:1" />                          
-                        <stop offset="100%" style="stop-color:#4dd9c6;stop-opacity:1" />  
-                    </linearGradient>  
-                    <linearGradient id="facet4" x1="50%" y1="0%" x2="50%" y2="100%">  
-                        <stop offset="0%" style="stop-color:#8ff5e3;stop-opacity:1" />  
-                        <stop offset="100%" style="stop-color:#3dd9c3;stop-opacity:1" />  
-                    </linearGradient>  
-                    <linearGradient id="dark" x1="0%" y1="0%" x2="100%" y2="100%">  
-                        <stop offset="0%" style="stop-color:#1a9988;stop-opacity:1" />  
-                        <stop offset="100%" style="stop-color:#2fb8a4;stop-opacity:1" />  
-                    </linearGradient>  
-                </defs>  
-                <polygon points="100,50 130,80 100,70 70,80" fill="url(#facet4)" opacity="0.95"/>  
-                <polygon points="100,35 130,80 100,50" fill="url(#facet2)" opacity="0.9"/>  
-                <polygon points="100,35 70,80 100,50" fill="url(#facet1)" opacity="0.85"/>  
-                <polygon points="130,80 155,85 145,95 100,70" fill="url(#facet3)" opacity="0.88"/>  
-                <polygon points="70,80 45,85 55,95 100,70" fill="url(#facet2)" opacity="0.87"/>  
-                <polygon points="100,35 155,85 145,55" fill="url(#facet1)" opacity="0.82"/>  
-                <polygon points="100,35 45,85 55,55" fill="url(#facet3)" opacity="0.83"/>  
-                <polygon points="145,95 155,85 160,110" fill="url(#dark)" opacity="0.75"/>  
-                <polygon points="55,95 45,85 40,110" fill="url(#dark)" opacity="0.75"/>  
-                <polygon points="100,70 145,95 100,125" fill="url(#facet1)" opacity="0.9"/>  
-                <polygon points="100,70 55,95 100,125" fill="url(#facet2)" opacity="0.88"/>  
-                <polygon points="145,95 160,110 130,145 100,125" fill="url(#facet3)" opacity="0.85"/>  
-                <polygon points="55,95 40,110 70,145 100,125" fill="url(#facet1)" opacity="0.83"/>  
-                <polygon points="100,125 130,145 100,165" fill="url(#facet2)" opacity="0.9"/>  
-                <polygon points="100,125 70,145 100,165" fill="url(#dark)" opacity="0.88"/>  
-                <polygon points="130,145 160,110 100,165" fill="url(#dark)" opacity="0.82"/>  
-                <polygon points="70,145 40,110 100,165" fill="url(#facet3)" opacity="0.8"/>  
-                <ellipse cx="95" cy="55" rx="18" ry="12" fill="white" opacity="0.7" transform="rotate(-20 95 55)"/>  
-                <ellipse cx="120" cy="85" rx="12" ry="8" fill="white" opacity="0.5" transform="rotate(15 120 85)"/>  
-                <circle cx="85" cy="68" r="6" fill="white" opacity="0.6"/>  
-                <ellipse cx="110" cy="100" rx="8" ry="5" fill="white" opacity="0.4"/>  
-            </svg>  
-        </div>  
-    </div>  
- 
-    <div class="container">  
-        <div class="intro-block">  
-            <h2>✨ Что такое компетенции?</h2>  
-            <p><strong>Компетенции</strong> (soft skills) — это поведение человека на работе, которое повышает вероятность успеха независимо от роли и профессии. Это то, как ты работаешь с людьми, принимаешь решения, справляешься с вызовами и развиваешься.</p>  
-            <p>В этом гайде представлены 31 ключевая компетенция, сгруппированная по 5 категориям, с практичными рекомендациями по развитию и рекомендованной литературой.</p>  
-            <p>Ищи нужную тебе компетенцию по поиску или по карточкам и читай, как развить то, что нужно именно тебе!</p>  
-            <p>Если тебе нужна помощь, обращайся к <a href="https://portal.vseinstrumenti.ru/structure/directory?id=bbaab942-1864-4a57-81bf-6a173a6da456" target="_blank" style="color: var(--vi-red); text-decoration: none; border-bottom: 2px solid var(--vi-red);">Команде поиска и развития ключевых талантов</a>, мы ответим на любой вопрос.</p>  
-        </div>  
- 
-        <input  
-            type="text"  
-            class="search-box"  
-            id="searchBox"  
-            placeholder="🔍 Найти свою идеальную компетенцию..."  
-        > 
- 
-        <div id="breadcrumbs" class="breadcrumbs section-hidden"></div>  
- 
-        <div id="navigationContainer"></div>  
-    </div>  
- 
-    <div class="floating-back-button" id="floatingBackBtn" onclick="showGroups()" title="Вернуться к группам"> 
-        ← 
-    </div>  
- 
-    <script>  
-        const competenciesData = {"groups": [{"name": "Стратегия и инновации", "description": "Связаны с анализом, прогнозированием, лидерством и управлением изменениями", "competencies": [{"name": "Стратегическое мышление", "difficulty": "Трудный (3-5 лет)", "when_developed": ["Способен видеть будущее организации и предвидеть долгосрочные тренды развития, т.е. может:", "Прогнозировать развитие ситуации на 1–3–5 лет вперед, опираясь на анализ внешней и внутренней среды", "Разрабатывать несколько альтернативных сценариев развития событий", "Предлагать стратегические инициативы, обоснованные экономической выгодой для компании", "Четко представлять последствия принимаемых решений и видеть скрытые взаимосвязи между факторами", "Генерировать конкурентоспособные и «прорывные» идеи, основанные на глубоком понимании рынка и внутренних возможностей организации"], "development": ["Создай регулярную практику — еженедельно выделяй час на стратегию. Обсуждай прогнозы с руководителем и коллегами, чтобы услышать их видение будущего.", "Изучи, как изменились внутренняя и внешняя среда за последний год. Составь список ключевых факторов (экономические, социально-культурные, административные, природные) и отслеживай их влияние.", "Разрабатывай сценарии: оптимистический, вероятный и пессимистический.", "На основе данных из разных источников составляй собственные прогнозы.", "Разработай инициативы: определи, как твоё подразделение влияет на корпоративную стратегию. Выбери 1–2 приоритетные инициативы на год с экономической выгодой и рассчитай ресурсы.", "Учись у опытных. Найди наставника среди руководителей и обсуждай с ним стратегические выводы. Анализируй рыночные тренды и возможности."], "literature": ["Матс Линдгрен, Ханс Бандхольд «Сценарное планирование. Связь между будущим и стратегией»", "Артур А. Томпсон-мл., А. Дж. Стрикленд III «Стратегический менеджмент. Концепции и ситуации для анализа»", "Джоэл Баркер «Опережающее мышление. Как увидеть новый тренд раньше других»", "Kenichi Ohmae «The Mind of the Strategist»", "Harvard Business Review (особенно стратегические кейсы и кейсы с директорами компаний)", "Strategy and Leadership (издание Strategic Leadership Forum)", "Курс Stepik «Сценарное мышление: начальный уровень» - https://stepik.org/course/192789/promo", "BSC Designer «Курс по стратегическому планированию» - https://bscdesigner.com/ru/strategic-planning-course.htm"], "number": 1}]}]};  
-        
-        let currentView = 'groups';  
-        let selectedGroup = null;  
-        const groupEmojis = ["🎯", "⚙️", "👥", "💬", "⭐"]; 
- 
-        function getDifficultyClass(difficulty) {  
-            if (!difficulty) return 'difficulty-unknown';  
-            const d = difficulty.toLowerCase();  
-            if (d.includes('самый легкий') || d.includes('0,5') || d.includes('0.5')) return 'difficulty-very-easy';  
-            if (d.includes('легкий') || d.includes('1-1')) return 'difficulty-easy';  
-            if (d.includes('средний') || d.includes('2-3')) return 'difficulty-medium';  
-            if (d.includes('трудный') && !d.includes('самый')) return 'difficulty-hard';  
-            if (d.includes('самый трудный') || d.includes('невозможно')) return 'difficulty-very-hard';  
-            return 'difficulty-unknown';  
-        } 
- 
-        function makeLinksClickable(text) {  
-            const urlRegex = /(https?:\/\/[^\s]+)/g;  
-            return text.replace(urlRegex, '<a href="$1" target="_blank">🔗 Перейти</a>');  
-        } 
- 
-        function updateBreadcrumbs() {  
-            const breadcrumbs = document.getElementById('breadcrumbs');  
-            const floatingBtn = document.getElementById('floatingBackBtn');  
-             
-            if (currentView === 'groups') {  
-                breadcrumbs.classList.add('section-hidden');  
-                floatingBtn.classList.remove('show');  
-                return;  
-            } 
- 
-            breadcrumbs.classList.remove('section-hidden');  
-            floatingBtn.classList.add('show');  
-             
-            let html = '<span onclick="showGroups()">🏠 Все группы</span>';  
- 
-            if (selectedGroup !== null) {  
-                const group = competenciesData.groups[selectedGroup];  
-                html += ' <span class="separator">→</span> ';  
-                html += `<span class="current">${groupEmojis[selectedGroup]} ${group.name}</span>`;  
-            } 
- 
-            breadcrumbs.innerHTML = html;  
-        } 
- 
-        function showGroups() {  
-            currentView = 'groups';  
-            selectedGroup = null;  
-             
-            const container = document.getElementById('navigationContainer');  
-            container.innerHTML = `
-                <div class="navigation-title">🚀 Выбери группу компетенций</div> 
-                <div class="groups-grid" id="groupsGrid"></div>
-            `; 
- 
-            const grid = document.getElementById('groupsGrid');  
-             
-            competenciesData.groups.forEach((group, index) => {  
-                const button = document.createElement('div');  
-                button.className = 'group-button';  
-                button.onclick = () => showCompetencies(index);  
-                button.innerHTML = `
-                    <span class="emoji">${groupEmojis[index]}</span>  
-                    <div class="title">${group.name}</div>  
-                    <div class="description">${group.description}</div>  
-                    <div class="count">${group.competencies.length} компетенций</div>  
-                `; 
-                grid.appendChild(button);  
-            }); 
- 
-            updateBreadcrumbs();  
-        } 
- 
-        function showCompetencies(groupIndex) {  
-            currentView = 'competencies';  
-            selectedGroup = groupIndex;  
-             
-            const group = competenciesData.groups[groupIndex];  
-            const container = document.getElementById('navigationContainer');  
-             
-            container.innerHTML = `
-                <div class="navigation-title">${groupEmojis[groupIndex]} ${group.name}</div>  
-                <div class="competencies-grid" id="competenciesGrid"></div>
-            `; 
- 
-            const grid = document.getElementById('competenciesGrid');  
-             
-            group.competencies.forEach(comp => {  
-                grid.appendChild(createCompetencyCard(comp));  
-            }); 
- 
-            updateBreadcrumbs();  
-        } 
- 
-        function createCompetencyCard(comp) {  
-            const card = document.createElement('div');  
-            card.className = 'competency-card';  
-            card.dataset.name = comp.name.toLowerCase();  
- 
-            const difficultyClass = getDifficultyClass(comp.difficulty);  
-            const difficultyText = comp.difficulty || 'Сложность не указана';  
- 
-            card.innerHTML = `
-                <div class="card-header">  
-                    <div class="card-number">№ ${comp.number}</div>  
-                    <div class="card-title">${comp.name}</div>  
-                    <div class="difficulty-badge ${difficultyClass}">  
-                        🎯 ${difficultyText}  
-                    </div>  
-                </div>  
-                <div class="card-body">  
-                    <button class="expand-btn" onclick="toggleCard(this)">  
-                        <span>Узнать больше</span>  
-                        <span class="icon">▼</span> 
-                    </button>  
-                    <div class="card-expanded">  
-                        ${renderWhenDeveloped(comp)}  
-                        ${renderDevelopment(comp)}  
-                        ${renderLiterature(comp)}  
-                    </div>  
-                </div>  
-            `; 
- 
-            return card;  
-        } 
- 
-        function renderWhenDeveloped(comp) {  
-            if (!comp.when_developed || comp.when_developed.length === 0) return '';  
-             
-            return `
-                <div class="description-section">  
-                    <div class="info-title">✅ Когда компетенция развита</div>  
-                    <div class="info-content">  
-                        <ul>  
-                            ${comp.when_developed.map(item => `<li>${item}</li>`).join('')}  
-                        </ul>  
-                    </div>  
-                </div>  
-            `; 
-        } 
- 
-        function renderDevelopment(comp) {  
-            if (!comp.development || comp.development.length === 0) {
-                return `<div class="info-section">
-                    <div class="info-title">💡 Способы развития</div>
-                    <div class="info-content"><p style="color: #999; font-style: italic;">Скоро здесь появятся практичные советы</p></div>
-                </div>`;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модель компетенций | ВсеИнструменты.ру</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --vi-red: #d60000;
+            --vi-teal: #3dd9c3;
+            --vi-dark: #333333;
+            --vi-gray: #666666;
+            --vi-light-gray: #f5f5f5;
+            --vi-border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            color: var(--vi-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--vi-red) 0%, var(--vi-teal) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "🔧";
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.08;
+            top: 50%;
+            left: 8%;
+            transform: translateY(-50%) rotate(-15deg);
+            animation: floatUp 6s ease-in-out infinite;
+        }
+
+        .diamond-container {
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            width: 200px;
+            height: 200px;
+            transform: translateY(-50%) rotate(-15deg);
+            animation: floatDown 6s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(61, 217, 195, 0.4));
+            opacity: 0.15;
+        }
+
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(-50%) rotate(-15deg); }
+            50% { transform: translateY(-60%) rotate(-10deg); }
+        }
+
+        @keyframes floatDown {
+            0%, 100% { transform: translateY(-50%) rotate(-15deg); }
+            50% { transform: translateY(-40%) rotate(-20deg); }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.98;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .intro-block {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .intro-block::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .intro-block h2 {
+            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .intro-block p {
+            color: var(--vi-gray);
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 1rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1.5rem 2rem;
+            font-size: 1.1rem;
+            border: 3px solid var(--vi-border);
+            border-radius: 50px;
+            margin-bottom: 3rem;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--vi-teal);
+            box-shadow: 0 6px 20px rgba(61, 217, 195, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .navigation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--vi-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .group-button {
+            background: white;
+            border: 3px solid var(--vi-border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .group-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .group-button:hover::before {
+            left: 100%;
+        }
+
+        .group-button:hover {
+            border-color: var(--vi-red);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(214, 0, 0, 0.25);
+        }
+
+        .group-button .emoji {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .group-button .title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--vi-dark);
+        }
+
+        .group-button .description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            color: var(--vi-gray);
+        }
+
+        .group-button .count {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 0.8rem;
+            color: var(--vi-teal);
+            font-weight: 600;
+        }
+
+        .competencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: start;
+        }
+
+        .competency-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+
+        .competency-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.15);
+            border-color: var(--vi-red);
+        }
+
+        .card-header {
+            padding: 2rem;
+            background: white;
+            border-bottom: 3px solid var(--vi-border);
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: var(--vi-red);
+            transition: width 0.4s;
+        }
+
+        .competency-card:hover .card-header::after {
+            width: 100%;
+        }
+
+        .card-number {
+            display: inline-block;
+            background: white;
+            color: var(--vi-red);
+            border: 2px solid var(--vi-red);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(214, 0, 0, 0.15);
+            width: fit-content;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--vi-dark);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .difficulty-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: fit-content;
+            opacity: 0.85;
+        }
+
+        .difficulty-very-easy { background: #81C784; }
+        .difficulty-easy { background: #AED581; }
+        .difficulty-medium { background: #FFB74D; }
+        .difficulty-hard { background: #FF8A65; }
+        .difficulty-very-hard { background: #E57373; }
+        .difficulty-unknown { background: #90A4AE; }
+
+        .card-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-expanded {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 3px dashed var(--vi-light-gray);
+        }
+
+        .card-expanded.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .description-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            padding-left: 2rem;
+            background: transparent;
+            border-radius: 12px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: -8px 0 16px rgba(76, 175, 80, 0.15);
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            padding-left: 2rem;
+            background: transparent;
+            border-radius: 12px;
+            border-left: 5px solid var(--vi-red);
+            box-shadow: -8px 0 16px rgba(214, 0, 0, 0.15);
+        }
+
+        .info-section.no-shadow {
+            background: white;
+            border: 2px solid var(--vi-light-gray);
+            border-left: 2px solid var(--vi-light-gray);
+            box-shadow: none;
+            padding-left: 1.5rem;
+        }
+
+        .info-title {
+            font-weight: 700;
+            color: var(--vi-dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .info-content {
+            color: var(--vi-gray);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .info-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-content li {
+            padding: 0.7rem 0;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .info-content li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--vi-red);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .description-section .info-content li:before {
+            content: "✨";
+            font-size: 1rem;
+        }
+
+        .reading-list {
+            background: linear-gradient(135deg, #FFF9E6, #FFF3CD);
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+            border: 2px solid #FFE082;
+        }
+
+        .reading-item {
+            padding: 0.8rem 0;
+            font-size: 0.95rem;
+            color: var(--vi-gray);
+            border-bottom: 1px solid #FFE082;
+            line-height: 1.6;
+        }
+
+        .reading-item:last-child {
+            border-bottom: none;
+        }
+
+        .reading-item::before {
+            content: "📖 ";
+            margin-right: 0.5rem;
+        }
+
+        .reading-item a {
+            color: var(--vi-red);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .reading-item a:hover {
+            border-bottom-color: var(--vi-red);
+            color: var(--vi-red);
+        }
+
+        .reading-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .reading-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .reading-list::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 10px;
+        }
+
+        .reading-list::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        .expand-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding: 0.6rem 1.2rem;
+            background: white;
+            color: var(--vi-red);
+            border: 2px solid var(--vi-red);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(214, 0, 0, 0.15);
+            width: fit-content;
+        }
+
+        .expand-btn:hover {
+            background: var(--vi-red);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(214, 0, 0, 0.25);
+        }
+
+        .expand-btn .icon {
+            transition: transform 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .expand-btn.expanded .icon {
+            transform: rotate(180deg);
+        }
+
+        .section-hidden {
+            display: none;
+        }
+
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            color: var(--vi-gray);
+            flex-wrap: wrap;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .breadcrumbs span {
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .breadcrumbs span:hover {
+            color: var(--vi-red);
+            background: #fff0f0;
+        }
+
+        .breadcrumbs .separator {
+            color: var(--vi-teal);
+            cursor: default;
+            font-weight: bold;
+        }
+
+        .breadcrumbs .current {
+            color: var(--vi-red);
+            font-weight: 700;
+            cursor: default;
+            background: #fff0f0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
             }
+
+            .diamond-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .groups-grid,
+            .competencies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .group-button .emoji {
+                font-size: 2.5rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--vi-red), var(--vi-teal));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vi-teal), var(--vi-red));
+        }
+
+        .floating-back-button {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 70px;
+            height: 45px;
+            background: white;
+            border: 2px solid var(--vi-border);
+            border-radius: 22px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            line-height: 0.5;
+            padding-bottom: 6px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            opacity: 0.7;
+        }
+
+        .floating-back-button:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            border-color: var(--vi-red);
+            box-shadow: 0 6px 20px rgba(214, 0, 0, 0.25);
+        }
+
+        .floating-back-button.show {
+            display: flex;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 0.7;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .floating-back-button {
+                bottom: 1rem;
+                left: 1rem;
+                width: 60px;
+                height: 40px;
+                border-radius: 20px;
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Модель компетенций</h1>
+        <p>Гайд по развитию личностных компетенций в ВсеИнструменты.ру</p>
+        
+        <div class="diamond-container">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="facet1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#4dd9c6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2fb8a4;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="facet2" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6ee8d5;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3dd9c3;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="facet3" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#2fb8a4;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#4dd9c6;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="facet4" x1="50%" y1="0%" x2="50%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8ff5e3;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3dd9c3;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="dark" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a9988;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2fb8a4;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <polygon points="100,50 130,80 100,70 70,80" fill="url(#facet4)" opacity="0.95"/>
+                <polygon points="100,35 130,80 100,50" fill="url(#facet2)" opacity="0.9"/>
+                <polygon points="100,35 70,80 100,50" fill="url(#facet1)" opacity="0.85"/>
+                <polygon points="130,80 155,85 145,95 100,70" fill="url(#facet3)" opacity="0.88"/>
+                <polygon points="70,80 45,85 55,95 100,70" fill="url(#facet2)" opacity="0.87"/>
+                <polygon points="100,35 155,85 145,55" fill="url(#facet1)" opacity="0.82"/>
+                <polygon points="100,35 45,85 55,55" fill="url(#facet3)" opacity="0.83"/>
+                <polygon points="145,95 155,85 160,110" fill="url(#dark)" opacity="0.75"/>
+                <polygon points="55,95 45,85 40,110" fill="url(#dark)" opacity="0.75"/>
+                <polygon points="100,70 145,95 100,125" fill="url(#facet1)" opacity="0.9"/>
+                <polygon points="100,70 55,95 100,125" fill="url(#facet2)" opacity="0.88"/>
+                <polygon points="145,95 160,110 130,145 100,125" fill="url(#facet3)" opacity="0.85"/>
+                <polygon points="55,95 40,110 70,145 100,125" fill="url(#facet1)" opacity="0.83"/>
+                <polygon points="100,125 130,145 100,165" fill="url(#facet2)" opacity="0.9"/>
+                <polygon points="100,125 70,145 100,165" fill="url(#dark)" opacity="0.88"/>
+                <polygon points="130,145 160,110 100,165" fill="url(#dark)" opacity="0.82"/>
+                <polygon points="70,145 40,110 100,165" fill="url(#facet3)" opacity="0.8"/>
+                <ellipse cx="95" cy="55" rx="18" ry="12" fill="white" opacity="0.7" transform="rotate(-20 95 55)"/>
+                <ellipse cx="120" cy="85" rx="12" ry="8" fill="white" opacity="0.5" transform="rotate(15 120 85)"/>
+                <circle cx="85" cy="68" r="6" fill="white" opacity="0.6"/>
+                <ellipse cx="110" cy="100" rx="8" ry="5" fill="white" opacity="0.4"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="intro-block">
+            <h2>✨ Что такое компетенции?</h2>
+            <p><strong>Компетенции</strong> (soft skills) - это поведение человека на работе, которое повышает вероятность успеха независимо от роли и профессии. Это то, как ты работаешь с людьми, принимаешь решения, справляешься с вызовами и развиваешься.</p>
+            <p>В этом гайде представлены 31 ключевая компетенция, сгруппированные по 5 категориям, с практичными рекомендациями по развитию и рекомендованной литературой.</p>
+            <p>Ищи нужную тебе компетенцию по поиску или по карточкам и читай, как развить то, что нужно именно тебе!</p>
+            <p>Если тебе нужна помощь, обращайся к <a href="https://portal.vseinstrumenti.ru/structure/directory?id=bbaab942-1864-4a57-81bf-6a173a6da456" target="_blank" style="color: var(--vi-red); text-decoration: none; border-bottom: 2px solid var(--vi-red);">Команде поиска и развития ключевых талантов</a>, мы ответим на любой вопрос</p>
+        </div>
+
+        <input 
+            type="text" 
+            class="search-box" 
+            id="searchBox" 
+            placeholder="🔍 Найти свою идеальную компетенцию..."
+        >
+
+        <div id="breadcrumbs" class="breadcrumbs section-hidden"></div>
+
+        <div id="navigationContainer"></div>
+    </div>
+
+    <!-- Плавающая кнопка "Назад" -->
+    <div class="floating-back-button" id="floatingBackBtn" onclick="showGroups()" title="Вернуться к группам">
+        ←
+    </div>
+
+    <script>
+        const competenciesData = {"groups": [{"name": "Стратегия и инновации", "description": "связаны с анализом, прогнозированием, лидерством и управлением изменениями", "competencies": [{"name": "Стратегическое мышление", "difficulty": "Трудный (3-5 лет)", "when_developed": ["Способен видеть будущее организации и предвидеть долгосрочные тренды развития, т.е. может:", "Прогнозировать развитие ситуации на 1–3–5 лет вперед, опираясь на анализ внешней и внутренней среды", "Разрабатывать несколько альтернативных сценариев развития событий", "Предлагать стратегические инициативы, обоснованные экономической выгодой для компании", "Четко представлять последствия принимаемых решений и видеть скрытые взаимосвязи между факторами", "Генерировать конкурентоспособные и «прорывные» идеи, основанные на глубоком понимании рынка и внутренних возможностей организации"], "development": ["Создай регулярную практику - еженедельно выделяй час на стратегию. Обсуждай прогнозы с руководителем и коллегами, чтобы услышать их видение будущего.", "Изучи, как изменились внутренняя и внешняя среда за последний год. Составь список ключевых факторов (экономические, социально-культурные, административные, природные) и отслеживай их влияние.", "Разрабатывай сценарии: оптимистический, вероятный и пессимистический.", "На основе данных из разных источников составляй собственные прогнозы.", "Разработай инициативы: определи, как твоё подразделение влияет на корпоративную стратегию. Выбери 1–2 приоритетные инициативы на год с экономической выгодой и рассчитай ресурсы.", "Учись у опытных. Найди наставника среди руководителей и обсуждай с ним стратегические выводы. Анализируй рыночные тренды и возможности."], "literature": ["Матс Линдгрен, Ханс Бандхольд «Сценарное планирование. Связь между будущим и стратегией”", "Артур А. Томпсон-мл., А. Дж. Стрикленд III “Стратегический менеджмент. Концепции и ситуации для анализа”", "Джоэл Баркер “Опережающее мышление. Как увидеть новый тренд раньше других”", "Kenichi Ohmae «The Mind of the Strategist»", "Harvard Business Review (особенно стратегические кейсы и кейсы с директорами компаний)", "Strategy and Leadership (издание Strategic Leadership Forum)", "Курс Stepik “Сценарное мышление: начальный уровень” - https://stepik.org/course/192789/promo", "BSC Designer “Курс по стратегическому планированию” - https://bscdesigner.com/ru/strategic-planning-course.htm"], "number": 1}, {"name": "Системное мышление", "difficulty": "Средний (2-3 года)", "when_developed": ["Анализирует большие объёмы информации, обобщая и сопоставляя факты", "Выстраивает целостную картину ситуации, учитывающую все ключевые детали и взаимосвязи", "Собирает данные из нескольких источников для принятия решений"], "development": ["Установи цели анализа, определи, что хочешь извлечь из информации", "Используй визуализацию данных (графики, диаграммы и др.)", "Выстраивая целостную картину ситуации, правильно сформулируй проблему. В этом помогут следующие вопросы:", "В чем конкретно выражается проблема?", "Какое целевое состояние?", "Какие отклонения?", "Где и как часто проявляется проблема?", "К каким последствиям приводит?", "Что будет, если проблему не решать?", "Выясни основные причины возникновения проблемы, в этом полезен метод 5 «почему»", "Сформулируй критерии, которым должно соответствовать хорошее решение", "Разработай план по решению проблемы и определи ресурсы, необходимые на каждом этапе"], "literature": ["Иан Макдермотт, Джейн О’Коннор “Искусство системного мышления”", "Шервуд Деннис “Системное мышление для руководителей”", "Донелла Медоуз “Азбука системного мышления”", "Вебинар \"Ловушки системного мышления\" - https://www.youtube.com/watch?v=Y4cJINVqDXE", "Онлайн-курс МФТИ: Системное мышление - https://www.coursera.org/learn/system-thinking"], "number": 2}, {"name": "Понимание бизнеса", "difficulty": "Средний (2-3 года)", "when_developed": ["Обладает пониманием бизнеса", "Знаком с текущим и возможным в будущем бизнес-курсом, практикой, тенденциями и изменениями в сфере электронной торговли и информации, затрагивающими его деятельность и организацию", "Знает конкурентную ситуацию", "Знаком с работой стратегии и тактики на данном рынке"], "development": ["Поговори с человеком, который занимается вопросами стратегического планирования. Попроси его рассказать о стратегическом плане компании или подразделения.", "Изучай цели компании и её результаты.", "Подумай про причинно-следственные связи происходящих в компании событий.", "Прояви инициативу и попроси руководителя включить тебя в кросс-функциональный проект со стратегической целью."], "literature": ["Business Week - http://www.businessweek.com", "Fortune - http://cgi.pathfinder.com/fortune", "Harvard Business Review - http://hbsp.harvard.edu/products/hbr", "Soundview Executive Book Summaries", "Wall Street Journal, http://www.wsj.com", "Jager, Rama Dev and Rafael Ortiz. In the Company of Giants. New York: McGraw-Hill, Inc., 1997.", "Kanter, Rosabeth Moss. On the Frontiers of Management. Boston: Harvard Business School Press, 1992.", "Macdonald, John. Calling a Halt to Mindless Change. New York: AMACOM, 1998.", "Olesen, Erik. 12 Steps to Mastering the Winds of Change. New York: Macmillan, 1993."], "number": 3}, {"name": "Управление видением и целью", "difficulty": "Средний (2-3 года)", "when_developed": ["Способен создать видение и чувство основной цели", "Говорит о возможностях и будущем", "Оптимист", "Создает ориентиры для поддержки своего видения", "Добивается того, что все начинают разделять его видение", "Может вдохновить и мотивировать целые отделы и организации"], "development": ["Сформулируй видение для своего подразделения в 1-2 простых предложениях - проверь, понятно ли оно коллегам", "На встречах с командой регулярно рассказывай, к какой цели вы идете и почему это важно", "Пройди тренинг по презентациям, публичным выступлениям, ораторскому искусству", "Изучи, как происходят изменения в организации - кто влияет, какие есть барьеры", "Практикуй упрощение: бери сложную стратегию и объясняй ее простыми словами коллеге"], "literature": ["Саймон Синек “Лидеры едят последними”", "Дэниел Гоулман “Эмоциональное лидерство: Искусство управления людьми на основе эмоционального интеллекта”"], "number": 4}, {"name": "Управление инновациями", "difficulty": "Самый трудный (5 лет)", "when_developed": ["Способен воплощать в жизнь креативные идеи других людей", "Правильно оценивает, какие творческие идеи и замыслы будут иметь успех", "Умеет направлять творческую работу других людей", "Может провести «мозговой штурм» как фасилитатор", "Способен предсказать рыночную продуктивность новых идей"], "development": ["Изучай потребности рынка через общение с клиентами, ищи их боли", "Изучай конкурентов: какие новинки они запускают, как реагирует рынок", "Изучи методы генерации идей", "Не бойся ошибок - они являются частью инновационного процесса", "Изучи метод мозгового штурма и метод \"6 шляп мышления\" - проведи 1-2 сессии с командой", "Запусти 1-2 небольших эксперимента (тестовых проекта) - анализируй результаты", "Оценивай новые идеи по критериям: решает ли проблему клиента, есть ли спрос, реально ли реализовать", "Развивай способность оценивать перспективность идей на основе рыночных данных"], "literature": ["Клейтон Кристенсен “Дилемма инноватора: Как из-за новых технологий погибают сильные компании”", "Алекс Остервальдер, Дэвид Блэнд “Тестирование бизнес-идей”", "В. Н. Бабич, А. Г. Кремлёв “Инновационная модель бизнес-процесса: Учебное пособие”", "Курс Product Lab “Подрывные инновации в бизнесе” - https://productlab.ru/business_innovation", "Курс Открытое образование “Статистические методы в управлении инновациями” - https://openedu.ru/course/ITMOUniversity/INMAN/?session=self_2024"], "number": 5}]}, {"name": "Управление задачами и процессами", "description": "охватывают результативность, организованность, работу с системами и задачами", "competencies": [{"name": "Достижение результата", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Постоянно добивается результата", "Работает упорно с намерением довести дело до конца", "Редко бросает дело, не доведя его до конца", "Настроен на активность и энергично выполняет задания", "Не боится действовать при отсутствии подробного плана", "Использует больше благоприятных возможностей, чем другие", "Постоянно и последовательно занимает место в ряду лучших работников"], "development": ["Бери задачи, где нужно быстро действовать - тренируй скорость принятия решений", "Когда видишь возможность - действуй в течение 24 часов, не откладывай", "Предлагай новые проекты и инициативы - сделай это периодическим (1 раз в квартал)", "Если столкнулся с препятствием - попробуй 2-3 разных подхода, прежде чем сдаться", "Веди список задач \"до конца\" - доводи их до завершения, а не до 80%"], "literature": ["Маршалл Голдсмит “Прыгни выше головы”", "Р. Темплар “Правила достижения цели”", "Дэн Вальдшмидт “Будь лучшей версией себя”", "Курс Kogio “Достижение целей: планируем свой успех” - https://kogio.ru/goal_achieving/", "Курс “Целеполагание” - https://wikium.ru/course/course-goal/intro"], "number": 6}, {"name": "Планирование", "difficulty": "Самый легкий (0,5-1 год)", "when_developed": ["Тщательно анализирует продолжительность и сложность заданий и проектов", "Ставит задачи и цели", "Декомпозирует рабочий процесс на этапы", "Разрабатывает графики и рабочие задания", "Предвидит проблемы и готовится к ним", "Соотносит исполнение с целью", "Оценивает результаты"], "development": ["Для каждого проекта составляй план: цель, этапы, сроки, ответственные, ресурсы", "Используй инструменты планирования: Gantt-диаграммы, канбан-доски, списки задач", "Закладывай буфер времени 20-30% на непредвиденные ситуации", "В начале проекта проведи сессию \"что может пойти не так\" - составь список рисков и план действий", "Еженедельно (или в зависимости от сроков) сверяй план с фактом - корректируй при отклонениях", "Учись оценивать способности людей, чтобы эффективно распределять задачи между ними"], "literature": ["Игорь Манн “Планируй. Как правильно планировать каждый год своей жизни и сделать максимум запланированного”", "Крис Бейли “Мой продуктивный год”", "Б. Моран, М Леннингтон “12 недель в году. Как за 12 недель сделать больше, чем другие успевают за 12 месяцев”", "Курс “Как всё успевать? Обзор техник управления временем” - https://www.youtube.com/watch?v=x2dEv015A7Y", "Курс “Планирование и организация. Россия – страна возможностей” - https://rsv.ru/education/course/8/1966/"], "number": 7}, {"name": "Организаторские способности", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Может оптимально распределить ресурсы (кадры, время, финансы, материалы, поддержку) для выполнения работы", "Способен руководить различными видами деятельности одновременно", "Эффективно и рационально использует ресурсы", "Структурирует информацию и файлы в удобном виде"], "development": ["Анализируй доступные ресурсы, выбирай наиболее эффективную связку", "Составь карту ресурсов: кто в команде, какие компетенции, сколько времени доступно", "Не делай несколько важных дел одновременно - используй принцип \"одна важная задача в один момент времени\"", "Создай систему хранения файлов и информации - понятную структуру папок, правила наименования", "Делегируй задачи, исходя из компетенций людей - не делай всё сам", "Планируй задачи заранее, не хватайся за всё в последний момент", "Владей собой. Чтобы избежать стресса, когда нужно одновременно следить за выполнением нескольких задач, используй планирование, делегирование, установление целей и критериев"], "literature": ["Адизес И. \"Идеальный руководитель\"", "Друкер П. \"Эффективный руководитель\"", "Иан Макдермотт, Джейн О’Коннор “Искусство системного мышления”", "Шервуд Деннис “Системное мышление для руководителей”"], "number": 8}, {"name": "Управление процессами", "difficulty": "Средний (2-3 года)", "when_developed": ["Способен определять процессы, необходимые для выполнения задания", "Знает, как организовать людей и работу", "Понимает, как разделить и объединить задания в рабочий процесс", "Знает, что и как измерить", "Видит возможности совместной деятельности", "Может упростить сложные процессы", "Получает отдачу при незначительных ресурсах"], "development": ["Опиши процесс в виде схемы: шаги, участники, входы-выходы - найди узкие места", "Задавай вопрос: \"Зачем этот шаг?\" - убирай лишнее, упрощай", "Определи метрики для процесса - что измерять, чтобы понимать эффективность", "Ищи возможности для автоматизации рутинных операций", "Анализируй процессы раз в квартал - что можно улучшить", "Посмотри журнал и статьи The Systems Thinker (они изучают процессы - как они протекают и почему так, а не иначе)"], "literature": ["Свод знаний по управлению бизнес процессами. BPM CBOK 3.0", "Harvard Business School “Руководство по улучшению бизнес процессов”", "Д.Харрингтон “Оптимизация бизнес процессов. Документирование, анализ, управление, оптимизация”", "Курс Skillbox: Процессное управление для повышения эффективности и результативности бизнеса - https://intensive.skillbox.ru/operational-efficiency-and-optimization-of-busines-processes/", "Курс ВШЭ: Анализ и моделирование бизнес-процессов - https://openedu.ru/course/hse/PROCESS/"], "number": 9}, {"name": "Управление временем и приоритетами", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Посвящает время первоочередным задачам", "Быстро концентрируется на основном и откладывает второстепенное", "Быстро чувствует, что способствует достижению цели", "Эффективно использует рабочее время", "Выполняет больший, чем остальные сотрудники, объем работы за одно и то же время"], "development": ["Используй матрицу Эйзенхауэра: дели задачи на срочные/несрочные и важные/неважные", "Логируй время на задачи", "Каждое утро выделяй 1-3 главные задачи дня - фокусируйся на них", "Научись говорить \"нет\" задачам, которые не соответствуют твоим приоритетам", "Убирай отвлекающие факторы: отключай уведомления, закрывай лишние вкладки", "Тренируйся рассчитывать время, которое затратишь на задачу", "Делегируй задачи, с которыми сможет справиться твоя команда"], "literature": ["Архангельский Г. \"Тайм-драйв\"", "Кови С. \"Семь навыков высокоэффективных людей\"", "Дэйв Креншоу «Миф о многозадачности»", "Курс “Тайм-менеджмент” - https://openedu.ru/course/spbu/TIME/?session=self_paced_2025"], "number": 10}, {"name": "Оптимизация и улучшение процессов", "difficulty": "Средний (2-3 года)", "when_developed": ["Постоянно ищет возможности для улучшения процессов и результатов", "Не довольствуется текущим положением дел", "Анализирует рабочие процессы с целью их оптимизации", "Предлагает конструктивные идеи по повышению эффективности работы"], "development": ["Раз в месяц выбирай один процесс в своей работе и анализируй: что можно улучшить, упростить или автоматизировать", "Задавай себе вопрос \"Почему мы делаем это именно так?\" - ищи альтернативные способы", "Собирай обратную связь от коллег и клиентов о том, что можно улучшить", "Предлагай улучшения руководителю или на встречах с командой, собирай ОС на свои предложения и участвуй в дискуссиях", "Изучай best practices в своей области - что делают лучшие компании"], "literature": ["Майк Микалко “Рисовый штурм и еще 21 способ мыслить нестандартно”", "Тим Браун “Дизайн-мышление в бизнесе”", "Алекс Остервальдер, Дэвид Блэнд “Тестирование бизнес-идей”", "Курс 4BRAIN.RU “Творческое мышление: развитие креативности” - https://4brain.ru/tvorcheskoe-myshlenie/", "Курс Lift-BF “Развитие креативности” - https://lift-bf.ru/courses/razvitie-kreativnosti-46"], "number": 11}, {"name": "Принятие решений (качество, своевременность)", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Собирает необходимую информацию и данные для принятия решений", "Опирается на данные, факты и логические аргументы в принятии решений", "Своевременно принимает решения, порой не имея полной информации, в сжатые сроки и находясь под давлением", "Способен быстро принимать решения", "Принимает удачные, правильные решения, основываясь на анализе, знаниях, опыте и суждении", "Проверяет полученную информацию на достоверность"], "development": ["Для важных решений используй фреймворк: собери факты, определи критерии, оцени варианты, выбери лучший", "Ставь себе дедлайны на принятие решений - не затягивай из-за перфекционизма", "Сохраняй фокус на твоей цели, чтобы отфильтровать значимую информацию от ненужной", "Определи, какие данные нужно собрать, чтобы принять обоснованное решение, используй надежные источники", "Чтобы упростить работу с объемной и противоречивой информацией, используй техники INSERT и «Шесть шляп»", "Определившись с данными, сопоставь их между собой, чтобы получить полное представление о теме и составить собственное мнение", "После принятия решения записывай: что решил, почему, что ожидаешь - через месяц анализируй результат", "Просчитывай последствия решений: что будет в лучшем/худшем случае, какие риски", "Иногда мы стараемся избегать определенных областей/деталей. Подели лист бумаги на две колонки. \nСлева перечисли области, в которых быстро принимаешь решения. Что общего между этими областями? \nСправа укажи области, в которых мешкаешь, сомневаешься. Что между ними общего? Риск? Участие более высокого руководства? \nИзбегаешь ли ты деталей, стратегических или технических областей, которые тебе не нравятся или о которых ты мало знаешь?\nРаботай над ними, помни о своей особенности избегания и отслеживай."], "literature": ["Том Чатфилд “Критическое мышление”", "Даниэль Канеман “Думай медленно… Решай быстро”", "Дайана Халперн “Психология критического мышления”", "Курс “Критическое мышление как навык XXI века” (Высшая школа экономики. Тарас Пащенко) - https://www.youtube.com/watch?v=y5gy5JYs-OE", "Курс “Логика и критическое мышление” (Никита Непряхин) - https://www.youtube.com/watch?app=desktop%E2%80%A8&v=eZUXYY9OCcs&ab_channel=NikitaNepryakhin"], "number": 12}]}, {"name": "Управление командой", "description": "связаны с лидерством, развитием людей, созданием эффективной команды и умением вдохновлять на достижение целей", "competencies": [{"name": "Создание эффективных команд", "difficulty": "Трудный (3-5 лет)", "when_developed": ["При необходимости группирует людей в команды", "Создает в команде сильный моральный дух и климат", "Разделяет с командой успехи и победы", "Поощряет открытый диалог", "Дает людям возможность завершить работу и отвечать за нее", "Определяет успех в свете пользы для всей команды", "Создает в команде чувство причастности"], "development": ["Сформулируй общую цель команды - убедись, что все ее понимают одинаково (попроси каждого рассказать своими словами)", "Вовлекай команду в постановку целей - пусть сами предлагают, как достичь результата (формируй сопричастность, это и их цели тоже)", "Проводи командные встречи не только для работы - раз в квартал или чаще устраивай неформальное мероприятие", "Отмечай публично успехи команды, а не отдельных людей - создавай атмосферу \"мы вместе\"", "Давай командные задачи, где нужно работать вместе - учи людей дополнять друг друга", "Поощряй открытость - создавай безопасную среду, где можно признавать ошибки и просить помощи"], "literature": ["Chris Argyris \"Overcoming Organizational Defenses\"", "Jon Katzenbach, Douglas Smith \"The Wisdom of Teams\"", "Glenn Parker \"Team Players and Teamwork\""], "number": 13}, {"name": "Развитие сотрудников", "difficulty": "Трудный (3-5 лет)", "when_developed": ["Дает сложные и важные, но посильные задания, требующие особой отдачи", "Часто проводит беседы, направленные на развитие", "В курсе карьерных устремлений каждого игрока", "Помогает составить и выполнить планы развития команды"], "development": ["Помни, без времени, потраченного руководителем, заинтересованности и усилий с его стороны сотрудникам будет очень сложно самосовершенствоваться и развиваться", "Регулярно проводи с каждым игроков встречу о развитии - обсуждай цели, прогресс, планы", "Узнай карьерные цели каждого сотрудника - запиши, регулярно возвращайся к этой теме, спрашивай, чем ты можешь им помочь, и сам продумывай", "Делегируй сложные задачи, но сначала убедись, что сотрудник справится", "Составь план развития для каждого: 2-3 конкретных навыка на полгода-год с конкретными действиями", "Давай обратную связь не только по результату, но и по тому, как человек развивается"], "literature": ["Беверли Кей, Джулия Джулиони “Помогите им вырасти или смотрите, как они уходят. Развитие сотрудников на практике”", "Джон Максвелл “Наставничество 101”", "Тим Рассел “Навыки эффективной обратной связи”", "Роман Матвеев “Наставничество. Метод Петра Кузнецова”", "PMCLUB: Подбор и развитие команды - https://www.youtube.com/playlist?list=PLOwmvy0J84eMG4zG2rcdiUzCWPBXBxXjq", "Распределенные команды: теории и практики - https://openedu.ru/course/spbu/DTEAMTEOR/"], "number": 14}, {"name": "Коммуникации руководителя", "difficulty": "Средний (2-3 года)", "when_developed": ["Своевременно предоставляет информацию, необходимую для работы", "Не скрывает то, что необходимо высказать", "Не боится предоставлять неудобную обратную связь", "Объясняет людям их положение", "Быстро реагирует на проблемы других людей", "Не боится применять непопулярные меры"], "development": ["Отслеживай, какая информация необходима твоей команде для выполнения задач, регулярно (1 раз в неделю) рассказывай, что происходит в компании/проектах, чтобы они не выпадали из инфополя", "При изменениях сообщай сразу всем одновременно, а не по отдельности", "Используй разные каналы: встречи для сложного, email/мессенджер для фактов, личные встречи для чувствительного", "Давай обратную связь по модели SBI: Situation (ситуация) - Behavior (поведение) - Impact (влияние)", "Не откладывай сложные разговоры - если нужно дать корректирующую обратную связь, делай это в течение недели", "При конфликтных решениях объясняй причины - даже если решение непопулярно"], "literature": ["Керри Паттерсон, Джозеф Гренни, Рон Макмиллан и Эл Свитцлеp “Трудные диалоги”", "Ли ЛеФевер “Искусство объяснять”", "Дейв Керпен “Гений коммуникации”"], "number": 15}, {"name": "Делегирование и обратная связь", "difficulty": "Легкий (1-1,5 лет)", "when_developed": ["Четко и в доступной форме делегирует задания и право принимать решения", "Широко делегирует как обязанности, так и ответственность", "Склонен доверять работе сотрудников", "Позволяет командным игрокам завершить выполняемую ими работу"], "development": ["При делегировании объясняй: что нужно сделать, зачем (цель), к какому сроку, какие полномочия даешь", "Используй ситуационное лидерство, чтобы правильно выбрать алгоритм делегирования", "Передавай не только задачу, но и право принимать решения в рамках этой задачи", "После делегирования договорись о точках контроля, но не контролируй каждый шаг", "Не выполняй сам задачи, которые могут делать командные игроки - освобождай время для своих приоритетов", "Составь список задач - раздели на \"только я\", \"могу делегировать\", \"нужно делегировать\"", "Регулярно давай обратную связь, своевременно, по конкретным поступкам, с примерами"], "literature": ["Брайан Трейси “Делегирование и управление”", "Мария Урбан “Успех чужими руками. Эффективное делегирование полномочий”", "Александр Фридман “Делегирование: результат руками сотрудников. Технология регулярного менеджмента”", "Интерактивные видео “Делегирование” - https://smeety.ru/delegation/", "Geek Brains. Эффективное делегирование, Инструкция по применению - https://gb.ru/courses/1163"], "number": 16}, {"name": "Мотивация других", "difficulty": "Средний (2-3 года)", "when_developed": ["Создает атмосферу, в которой каждый старается максимально проявить себя", "Мотивирует деятельность команды и участников проектов", "Способен выявить сильные стороны человека и использовать их", "Передает команде полномочия", "Поощряет личный вклад каждого", "Дает каждому почувствовать важность его работы", "Человек, с которым и на которого приятно работать"], "development": ["Объясняй смысл работы - как задача каждого человека влияет на общий результат", "Спрашивай мнение команды при постановке целей и принятии решений, которые их касаются", "Узнай у каждого сотрудника индивидуально: что его мотивирует в работе (развитие, признание, автономия, деньги?)", "Благодари людей за конкретные действия - не общее \"молодец\", а \"спасибо, что сделал X, это помогло достичь Y\"", "Давай сотрудникам задачи, где они могут проявить свои сильные стороны"], "literature": ["Пинк Д. \"Драйв. Что на самом деле нас мотивирует\"", "Джон Максвелл «Пять уровней лидерства»", "Патрик Ленсиони «Пять пороков команды»", "Саймон Синек «Начни с “Зачем?”. Как выдающиеся лидеры вдохновляют действовать»"], "number": 17}]}, {"name": "Коммуникации", "description": "отражают эффективную внутреннюю и внешнюю коммуникацию, взаимодействие и ориентацию на клиента, умение работать с коллегами, командой и руководством", "competencies": [{"name": "Способность к межличностным взаимодействиям", "difficulty": "Средний (2-3 года)", "when_developed": ["Эффективно работает с разными типами людей в команде", "Выстраивает продуктивные рабочие отношения", "Умеет находить общие интересы и точки соприкосновения для совместной работы", "Дипломатично разрешает конфликты и противоречия", "Адаптирует стиль взаимодействия под задачу и участников", "Доносит информацию понятно и доступно для разной аудитории"], "development": ["В командных проектах намеренно ищи точки пересечения интересов разных участников", "При конфликте фокусируйся на общей цели, а не на разногласиях", "Адаптируй стиль коммуникации под собеседника: с кем-то нужно больше данных, с кем-то эмоций", "Практикуй дипломатичные формулировки при обсуждении спорных вопросов", "После встреч анализируй, что помогло/помешало эффективному взаимодействию"], "literature": ["Павел Безручко “Без воды”", "Лари Кинг “Как разговаривать с кем угодно, когда угодно и где угодно”", "Альпина Бизнес Букс “Эффективное деловое общение”", "Курс Максим Ильяхов “Ясно, понятно. Как доносить мысли и убеждать людей с помощью слов” - https://www.youtube.com/watch?v=3yaVguM6R4k"], "number": 18}, {"name": "Доступность", "difficulty": "Средний (2-3 года)", "when_developed": ["Открыт к общению, легко идет на контакт", "Создает комфортную атмосферу для диалога", "Демонстрирует доброжелательность и участие", "Делает себя \"видимым\" и \"досягаемым\" для коллег", "Проявляет искренний интерес к людям"], "development": ["Первым инициируй контакт - здоровайся, улыбайся, будь видимым", "Выделяй время для неформального общения - обеды, кофе-брейки", "Проверяй, насколько понятно ты объясняешь: \"Я понятно объяснил?\"", "Адаптируй язык под аудиторию - избегай сложных терминов там, где это не нужно", "Покажи, что открыт к вопросам и обратной связи", "Подмечай детали о людях и проявляй к ним интерес - спрашивай “как дела”, “как прошли выходные”"], "literature": ["Гоулман Д. \"Эмоциональный интеллект\"", "Розенберг М. \"Язык жизни. Ненасильственное общение\"", "Лари Кинг “Как разговаривать с кем угодно, когда угодно и где угодно”", "Курс Максим Ильяхов “Ясно, понятно. Как доносить мысли и убеждать людей с помощью слов” - https://www.youtube.com/watch?v=3yaVguM6R4k", "Берн Э. \"Игры, в которые играют люди\""], "number": 19}, {"name": "Управление конфликтами", "difficulty": "Самый трудный (5 лет)", "when_developed": ["Не боится конфликтов, считая их возможностями", "Быстро разбирается в ситуации", "Имеет навыки направленного слушания", "Может приводить стороны к соглашениям", "Умеет находить общие позиции"], "development": ["При конфликте дай людям выговориться - слушай, не перебивай, задавай вопросы для понимания", "Примени технику: запиши на флипчарте общие позиции, потом - спорные моменты. Работай со спорными", "Сужай конфликт: не \"мы вам не доверяем\", а \"конкретно в ситуации X было Y\"", "Ищи win-win решения: что я могу уступить, чтобы получить важное для меня", "Отделяй проблему от людей - обсуждай факты, а не личности", "Если зашли в тупик - привлеки третью сторону как арбитра"], "literature": ["Thomas Crowley \"Settle it out of court\"", "Stewart Levine \"Getting to Resolution\"", "Erik Van Slyke \"Listening to conflict\""], "number": 20}, {"name": "Умение слушать", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Внимательно и активно слушает собеседника", "Не перебивает, дает высказаться до конца", "Точно понимает и воспроизводит точку зрения другого человека", "Задает уточняющие вопросы для глубокого понимания", "Концентрируется на словах говорящего, а не на подготовке своего ответа"], "development": ["Практикуй активное слушание: не перебивай, смотри в глаза, кивай, делай пометки", "После того как человек высказался, перефразируй его мысль: \"Правильно ли я понял, что...?\"", "Задавай уточняющие вопросы вместо того, чтобы сразу давать советы", "Не думай о своем ответе, пока человек говорит - сосредоточься на его словах", "Убери отвлекающие факторы при разговоре - телефон, компьютер, другие задачи"], "literature": ["Атватер И. \"Я вас слушаю\"", "Гиппенрейтер Ю. \"Чудеса активного слушания\"", "Берн Э. \"Игры, в которые играют люди\""], "number": 21}, {"name": "Навыки презентации и публичных выступлений", "difficulty": "Средний (2-3 года)", "when_developed": ["Действует эффективно в различных презентационных ситуациях", "Эффективен в спокойных и напряженных ситуациях", "Удерживает внимание и управляет аудиторией", "Может менять тактику на ходу"], "development": ["Готовься к презентациям: структура (что скажу в начале/середине/конце), репетиция вслух минимум 2 раза, старайся не читать, а рассказывать", "Изучай аудиторию заранее - кто они, что их волнует, какие вопросы зададут", "Записывай свои выступления на видео - анализируй, что улучшить", "Начинай с малого - выступай сначала перед командой, потом расширяй аудиторию", "Поможет только практика - чем больше ты будешь выступать, тем быстрее научишься"], "literature": ["Гандапас Р “К выступлению готов. Презентационный контруктор”", "Дмитрий Лазарев \"Презентация: Лучше один раз увидеть!\"", "Каптерев А. \"Мастерство презентации\"", "Дейл Карнеги “Как выработать уверенность в себе и влиять на людей, выступая публично”"], "number": 22}, {"name": "Ориентация на потребности клиента", "difficulty": "Самый легкий (0,5-1 год)", "when_developed": ["Старается удовлетворить ожидания внутренних и внешних потребителей", "Получает информацию о потребителях из первых рук", "Принимает решения с учетом интересов потребителей", "Устанавливает успешные отношения с потребителями"], "development": ["Общайся с клиентами регулярно", "Задавай открытые вопросы: \"Что вас беспокоит?\", \"Как мы можем улучшить?\", \"С какими проблемами столкнулись?\"", "Создай систему сбора обратной связи от клиентов - опросы, интервью, отзывы", "При принятии решения спрашивай себя: \"Как это повлияет на клиента?\"", "Изучай жалобы и критику - там ценная информация для улучшений"], "literature": ["Карл Сьюэлл, Пол Браун “Клиенты на всю жизнь”", "Фред Райхельд , Роб Марки “Искренняя лояльность”", "Рик Баррера “Превосходя ожидания”", "Курс Игорь Манн \"Клиентоориентированность” - https://www.youtube.com/watch?v=A6CSdQqCvPI", "Курс “Довольный клиент: как общаться и не прогибаться” - https://lift-bf.ru/courses/vnutrennjaja-klientoorientirovannost-23"], "number": 23}]}, {"name": "Личные качества", "description": "охватывают саморазвитие, мотивацию, этику, устойчивость и поведенческие аспекты", "competencies": [{"name": "Ответственность", "difficulty": "Средний (2-3 года)", "when_developed": ["Берет на себя ответственность за свои действия и результаты работы", "Выполняет взятые на себя обязательства", "Не перекладывает ответственность на других", "Признает свои ошибки и извлекает из них уроки", "Надежен в выполнении поручений"], "development": ["Веди список своих обязательств и дедлайнов - проверяй его ежедневно", "Если допустил ошибку - сразу сообщи об этом, предложи план исправления", "Анализируй свои ошибки: что пошло не так, что сделать по-другому в следующий раз", "Не ищи виноватых - фокусируйся на решении проблемы", "Выполняй обещания в срок - если не успеваешь, предупреди заранее"], "literature": ["С.Кови “7 навыков высокоэффективных людей”", "К. Паттерсон “Серьезный разговор об ответственности”", "Д.Карнеги “Как перестать беспокоиться и начать жить”", "Курс Coursera “Развитие самостоятельности и ответственности” - https://www.coursera.org/learn/razvitie-samostoyatelnosti-i-otvetstvennosti", "Курс Udemy “Как стать более ответственным и эффективным” - https://www.udemy.com/course/kak-stat-bolee-otvetstvennym-i-ef"], "number": 24}, {"name": "Стремление к развитию и быстрому обучению", "difficulty": "Средний (2-3 года)", "when_developed": ["Лично заинтересован в самосовершенствовании", "Понимает, что разные ситуации требуют разных навыков", "Старается проявить свои сильные стороны", "Работает над компенсацией точек роста", "Быстро схватывает новую информацию", "Активно экспериментирует и пробует все для поиска решения", "Любит решать трудные и новые для него задачи", "Быстро схватывает суть и структуру любой проблемы"], "development": ["Составь план развития на полгода/год: 2-3 навыка, конкретные действия по каждому", "Выдели минимум 1 час в неделю на обучение - читай книги, смотри курсы, ходи на конференции", "Применяй правило 70-20-10: 70% учись на практике, 20% у других людей, 10% через книги и курсы", "Запрашивай обратную связь у руководителя и коллег", "Пробуй новые подходы - варьируй свой стиль в зависимости от ситуации"], "literature": ["С.Кови “7 навыков высокоэффективных людей”", "Э. Голдратт “Цель. Процесс непрерывного совершенствования”", "Б. Блюменталь “Одна привычка в неделю. Измени себя за год”", "Курс 4Brain “Самообразование” - https://4brain.ru/samoobrazovanie/?refuid=16689881569007", "Курс “Саморазвитие и личностный рост” - https://kurshub.ru/kursy/luchshie-kursy-po-samorazvitiyu/"], "number": 25}, {"name": "Самооценка и рефлексия", "difficulty": "Средний (2-3 года)", "when_developed": ["Знает свои сильные и слабые стороны", "Прислушивается к мнению о себе", "Черпает вдохновение из анализа ошибок", "Открыт для критики", "Не обижается на обратную связь и критику", "Стремится к сбалансированной обратной связи"], "development": ["Проси обратную связь регулярно - у руководителя на ДТП, у коллег после совместных задач", "Веди дневник рефлексии: раз в неделю или чаще записывай, что получилось, что нет, какие выводы", "При получении критики не оправдывайся - сначала скажи \"спасибо\", потом обдумай", "Пройди психометрические тесты (MBTI, Hogan, Gallup StrengthsFinder) - узнай свои особенности", "Проси конкретные примеры: не \"ты плохо коммуницируешь\", а \"в ситуации X ты сделал Y, это привело к Z\""], "literature": ["Дэвид Сьюзан \"Ловушки мышления\"", "Канеман Д. \"Думай медленно... решай быстро\""], "number": 26}, {"name": "Баланс работы и личной жизни", "difficulty": "Трудный (3-5 лет)", "when_developed": ["Поддерживает разумный баланс между работой и личной жизнью", "Может отключиться от одной сферы жизни и полностью сконцентрироваться на другой", "Разносторонняя личность", "Знает, как заниматься работой и личной жизнью", "Знает, как получить от работы и жизни то, что хочет"], "development": ["Определи свои приоритеты в жизни - не только работа, но и семья, здоровье, хобби", "Установи границы: время, когда ты не отвечаешь на рабочие сообщения (вечера, выходные)", "Блокируй в календаре время для личной жизни так же, как для рабочих встреч", "Найди хобби или занятие вне работы - спорт, творчество, волонтерство", "Отключайся от работы полностью - не проверяй почту в отпуске, не думай о задачах вечером"], "literature": ["Лора Вандеркам “Книга о потерянном времени. У вас больше возможностей, чем вы думаете”", "Кристенсен К. “Стратегия жизни”", "HBR Guide. Жизненный баланс - https://www.mann-ivanov-ferber.ru/books/hbr-guide-zhiznennyj-balans/", "Тони Шварц “То, как мы работаем, — не работает. Проверенные способы управления жизненной энергией”", "Брэд Сталберг, Стив Магнесс “Гори, но не сгорай. Как пойти ва-банк, добиться успеха и наслаждаться жизнью без баланса”"], "number": 27}, {"name": "Этика и ценности", "difficulty": "Средний (2-3 года)", "when_developed": ["Придерживается корпоративному набору ценностей и убеждений", "Поступает в соответствии с этими ценностями", "Поддерживает следование ценностям и не приветствует обратное", "Подтверждает на практике ценности, которых придерживается"], "development": ["Сформулируй свои личные ценности - 3-5 принципов, по которым живешь", "Убедись, что твои ценности согласуются с ценностями компании", "При принятии решения проверяй - соответствует ли оно твоим ценностям", "Добивайся, чтобы слова не расходились с делом - если сказал, сделай", "Выражай поддержку людям, которые действуют в соответствии с ценностями компании"], "literature": [], "number": 28}, {"name": "Честность и доверие", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Пользуется доверием коллектива", "Имеет репутацию прямого и правдивого человека", "Умеет преподнести правду правильным образом", "Не распространяет личную информацию коллег", "Признает свои ошибки", "Не создает о себе ложного впечатления"], "development": ["Говори правду, даже когда это неприятно - но делай это конструктивно и тактично", "Храни конфиденциальную информацию - если тебе доверили, не рассказывай другим", "Признавай свои ошибки открыто и сразу - \"Я ошибся в X, вот что я сделаю для исправления\"", "Выполняй обещания - если не можешь, сразу предупреди", "Будь последователен - не меняй позицию в зависимости от аудитории"], "literature": ["Стивен Кови, Ребекка Меррилл \"Скорость доверия. То, что меняет всё\"", "Дэн Ариели “Вся правда о неправде. Почему и как мы обманываем”", "Ленсиони П \"Пять пороков команды\""], "number": 29}, {"name": "Справедливость", "difficulty": "Легкий (1-1,5 года)", "when_developed": ["Относится к коллегам и команде беспристрастно", "Поступает справедливо", "Открыто дискутирует", "Не проводит скрытую политику", "Никому не отдает предпочтение"], "development": ["Оценивай людей по результатам и вкладу, а не по личным симпатиям", "Распределяй задачи и возможности равномерно - следи, чтобы не было любимчиков", "Делись информацией со всей командой одновременно, а не избирательно", "При принятии решений, касающихся людей, используй одинаковые критерии для всех", "Прислушивайся к мнению каждого - давай возможность высказаться всем"], "literature": ["Адамс Дж.С. Теория справедливости", "Райан Холидей “Справедливость: решая, как поступить, ты определяешь свой путь”", "Майкл Дж. Сэндел “Справедливость. Как поступать правильно?”"], "number": 30}, {"name": "Эмоциональная (психологическая) устойчивость", "difficulty": "Трудный (3-5 лет)", "when_developed": ["Легко справляется с изменениями", "Легко меняет темп и интенсивность работы", "Способен принимать решения и действовать, не имея полной картины", "Не бывает обескуражен неопределенной ситуацией", "Легко справляется с риском и неопределенностью", "Не теряет самообладания, когда на него оказывают давление", "Удерживает контроль в трудных ситуациях", "Умеет справляться со стрессом"], "development": ["Тренируй принятие решений с неполной информацией: ставь себе дедлайн \"решить за 30 минут\" с тем, что есть", "Освой 2-3 техники управления стрессом: дыхательные упражнения, короткие перерывы, физическая активность", "Веди дневник ситуаций, когда терял самообладание - анализируй триггеры и ищи закономерности", "При изменениях задавай себе вопрос: \"Какие возможности это открывает?\" вместо \"Что может пойти не так?\"", "Изучи техники работы с неопределенностью: сценарное планирование, анализ рисков"], "literature": ["Льюис Д “Управление стрессом. Как найти дополнительные 10 часов в неделю”", "Карнеги Дейл “Как преодолеть тревогу и стресс”", "Филип Тетлок, Дэн Гарднер “Думай медленно — предсказывай точно”", "Тревис Брэдберри и Джин Гривз “Эмоциональный интеллект 2.0”", "Курс “Интеллектуальное управление эмоциями” - https://academy.hh.ru/catalog/intellektualnoe-upravlenie-emotsiiami/"], "number": 31}]}]};
+        let currentView = 'groups';
+        let selectedGroup = null;
+        const groupEmojis = ["🎯", "⚙️", "👥", "💬", "⭐"];
+
+        function getDifficultyClass(difficulty) {
+            if (!difficulty) return 'difficulty-unknown';
+            const d = difficulty.toLowerCase();
+            if (d.includes('самый легкий') || d.includes('0,5') || d.includes('0.5')) {
+                return 'difficulty-very-easy';
+            } else if (d.includes('легкий') || d.includes('1-1')) {
+                return 'difficulty-easy';
+            } else if (d.includes('средний') || d.includes('2-3')) {
+                return 'difficulty-medium';
+            } else if (d.includes('трудный') && !d.includes('самый')) {
+                return 'difficulty-hard';
+            } else if (d.includes('самый трудный') || d.includes('невозможно')) {
+                return 'difficulty-very-hard';
+            }
+            return 'difficulty-unknown';
+        }
+
+        function makeLinksClickable(text) {
+            // Ищем URL в тексте
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, '<a href="$1" target="_blank">🔗 Перейти</a>');
+        }
+
+        function updateBreadcrumbs() {
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            const floatingBtn = document.getElementById('floatingBackBtn');
+            
+            if (currentView === 'groups') {
+                breadcrumbs.classList.add('section-hidden');
+                floatingBtn.classList.remove('show');
+                return;
+            }
+
+            breadcrumbs.classList.remove('section-hidden');
+            floatingBtn.classList.add('show');
+            
+            let html = '<span onclick="showGroups()">🏠 Все группы</span>';
+
+            if (selectedGroup !== null) {
+                const group = competenciesData.groups[selectedGroup];
+                html += ' <span class="separator">→</span> ';
+                html += `<span class="current">${groupEmojis[selectedGroup]} ${group.name}</span>`;
+            }
+
+            breadcrumbs.innerHTML = html;
+        }
+
+        function showGroups() {
+            currentView = 'groups';
+            selectedGroup = null;
+            
+            const container = document.getElementById('navigationContainer');
+            container.innerHTML = `
+                <div class="navigation-title">🚀 Выбери группу компетенций</div>
+                <div class="groups-grid" id="groupsGrid"></div>
+            `;
+
+            const grid = document.getElementById('groupsGrid');
+            
+            competenciesData.groups.forEach((group, index) => {
+                const button = document.createElement('div');
+                button.className = 'group-button';
+                button.onclick = () => showCompetencies(index);
+                button.innerHTML = `
+                    <span class="emoji">${groupEmojis[index]}</span>
+                    <div class="title">${group.name}</div>
+                    <div class="description">${group.description}</div>
+                    <div class="count">${group.competencies.length} компетенций</div>
+                `;
+                grid.appendChild(button);
+            });
+
+            updateBreadcrumbs();
+        }
+
+        function showCompetencies(groupIndex) {
+            currentView = 'competencies';
+            selectedGroup = groupIndex;
+            
+            const group = competenciesData.groups[groupIndex];
+            const container = document.getElementById('navigationContainer');
+            
+            container.innerHTML = `
+                <div class="navigation-title">${groupEmojis[groupIndex]} ${group.name}</div>
+                <div class="competencies-grid" id="competenciesGrid"></div>
+            `;
+
+            const grid = document.getElementById('competenciesGrid');
+            
+            group.competencies.forEach(comp => {
+                grid.appendChild(createCompetencyCard(comp));
+            });
+
+            updateBreadcrumbs();
+        }
+
+        function createCompetencyCard(comp) {
+            const card = document.createElement('div');
+            card.className = 'competency-card';
+            card.dataset.name = comp.name.toLowerCase();
+
+            const difficultyClass = getDifficultyClass(comp.difficulty);
+            const difficultyText = comp.difficulty || 'Сложность не указана';
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-number">№ ${comp.number}</div>
+                    <div class="card-title">${comp.name}</div>
+                    <div class="difficulty-badge ${difficultyClass}">
+                        🎯 ${difficultyText}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <button class="expand-btn" onclick="toggleCard(this)">
+                        <span>Узнать больше</span>
+                        <span class="icon">▼</span>
+                    </button>
+                    <div class="card-expanded">
+                        ${renderWhenDeveloped(comp)}
+                        ${renderDevelopment(comp)}
+                        ${renderLiterature(comp)}
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function renderWhenDeveloped(comp) {
+            if (comp.when_developed.length === 0) {
+                return '';
+            }
+            
             return `
-                <div class="info-section">  
-                    <div class="info-title">💡 Способы развития</div>                     
-                    <div class="info-content">  
-                        <ul>  
-                            ${comp.development.map(item => `<li>${item}</li>`).join('')}  
-                        </ul>  
-                    </div>  
-                </div>`;
-        } 
- 
-        function renderLiterature(comp) {  
-            if (!comp.literature || comp.literature.length === 0) return '';  
-             
+                <div class="description-section">
+                    <div class="info-title">✅ Когда компетенция развита</div>
+                    <div class="info-content">
+                        <ul>
+                            ${comp.when_developed.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDevelopment(comp) {
             return `
-                <div class="info-section no-shadow">  
-                    <div class="info-title">📚 Рекомендованная литература</div> 
-                    <div class="reading-list">  
-                        ${comp.literature.map(item => {  
-                            const linkedItem = makeLinksClickable(item);  
-                            return `<div class="reading-item">${linkedItem}</div>`;  
-                        }).join('')}  
-                    </div>  
-                </div>`;
-        } 
- 
-        function toggleCard(button) {  
-            const card = button.closest('.competency-card');  
-            const expanded = card.querySelector('.card-expanded');               
-            expanded.classList.toggle('show');  
-            button.classList.toggle('expanded');  
-            button.querySelector('span:first-child').textContent =  
-                expanded.classList.contains('show') ? 'Скрыть' : 'Узнать больше';  
-        } 
- 
-        function initSearch() {  
-            const searchBox = document.getElementById('searchBox');  
-            searchBox.addEventListener('input', (e) => {  
-                const query = e.target.value.toLowerCase();  
-                 
-                if (query === '') {  
-                    if (currentView === 'competencies') {  
-                        document.querySelectorAll('.competency-card').forEach(card => {  
-                            card.style.display = 'block';  
-                        }); 
-                    } 
-                    return;  
-                } 
- 
-                let results = [];  
-                competenciesData.groups.forEach((group, groupIdx) => {  
-                    group.competencies.forEach(comp => {  
-                        let found = comp.name.toLowerCase().includes(query);  
-                        if (!found && comp.when_developed) {  
-                            found = comp.when_developed.some(item => item.toLowerCase().includes(query)); 
-                        } 
-                        if (!found && comp.development) {  
-                            found = comp.development.some(item => item.toLowerCase().includes(query)); 
-                        } 
-                        if (!found && comp.literature) {  
-                            found = comp.literature.some(item => item.toLowerCase().includes(query)); 
-                        } 
-                        if (!found && comp.difficulty) {  
-                            found = comp.difficulty.toLowerCase().includes(query);  
-                        } 
-                        if (found) {  
-                            results.push({ comp, groupIdx }); 
-                        } 
-                    }); 
-                }); 
- 
-                const container = document.getElementById('navigationContainer');
-                if (results.length > 0) {  
-                    currentView = 'competencies';  
-                    selectedGroup = results[0].groupIdx;  
-                     
-                    const resultWord = results.length === 1 ? 'компетенция' :  
-                                      results.length < 5 ? 'компетенции' : 'компетенций';  
-                    container.innerHTML = `  
-                        <div class="navigation-title">🔍 Найдено: ${results.length} ${resultWord}</div>  
-                        <div class="competencies-grid" id="searchResults"></div>  
-                    `; 
-                     
-                    const grid = document.getElementById('searchResults');  
-                    results.forEach(result => {  
-                        grid.appendChild(createCompetencyCard(result.comp));  
-                    }); 
-                } else {  
-                    currentView = 'competencies';  
-                    selectedGroup = null;  
-                    container.innerHTML = `  
-                        <div class="navigation-title">🔍 По запросу "${query}" ничего не найдено</div> 
-                        <div style="text-align: center; padding: 3rem; color: var(--vi-gray);">  
-                            <p style="font-size: 1.2rem; margin-bottom: 1rem;">😔 К сожалению, компетенции с таким содержанием не найдены</p>  
-                            <p>Попробуйте изменить запрос или <span style="color: var(--vi-red); cursor: pointer; font-weight: 600;" onclick="document.getElementById('searchBox').value=''; showGroups();">вернуться к списку групп</span></p>  
-                        </div>`;                      
-                } 
-                updateBreadcrumbs();  
-            }); 
-        } 
- 
-        showGroups();  
-        initSearch();  
-    </script>  
-</body>  
+                <div class="info-section">
+                    <div class="info-title">💡 Способы развития</div>
+                    <div class="info-content">
+                        ${comp.development.length > 0 ? `
+                            <ul>
+                                ${comp.development.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        ` : '<p style="color: #999; font-style: italic;">Скоро здесь появятся практичные советы</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLiterature(comp) {
+            if (comp.literature.length === 0) {
+                return '';
+            }
+            
+            return `
+                <div class="info-section no-shadow">
+                    <div class="info-title">📚 Рекомендованная литература</div>
+                    <div class="reading-list">
+                        ${comp.literature.map(item => {
+                            const linkedItem = makeLinksClickable(item);
+                            return `<div class="reading-item">${linkedItem}</div>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleCard(button) {
+            const card = button.closest('.competency-card');
+            const expanded = card.querySelector('.card-expanded');
+            
+            expanded.classList.toggle('show');
+            button.classList.toggle('expanded');
+            button.querySelector('span:first-child').textContent = 
+                expanded.classList.contains('show') ? 'Скрыть' : 'Узнать больше';
+        }
+
+        function initSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                
+                if (query === '') {
+                    if (currentView === 'competencies') {
+                        document.querySelectorAll('.competency-card').forEach(card => {
+                            card.style.display = 'block';
+                        });
+                    }
+                    return;
+                }
+
+                // Расширенный поиск по всем полям компетенции
+                let results = [];
+                competenciesData.groups.forEach((group, groupIdx) => {
+                    group.competencies.forEach((comp) => {
+                        // Поиск в названии
+                        let found = comp.name.toLowerCase().includes(query);
+                        
+                        // Поиск в "Когда развита"
+                        if (!found && comp.when_developed) {
+                            found = comp.when_developed.some(item => 
+                                item.toLowerCase().includes(query)
+                            );
+                        }
+                        
+                        // Поиск в "Способы развития"
+                        if (!found && comp.development) {
+                            found = comp.development.some(item => 
+                                item.toLowerCase().includes(query)
+                            );
+                        }
+                        
+                        // Поиск в литературе
+                        if (!found && comp.literature) {
+                            found = comp.literature.some(item => 
+                                item.toLowerCase().includes(query)
+                            );
+                        }
+                        
+                        // Поиск в сложности
+                        if (!found && comp.difficulty) {
+                            found = comp.difficulty.toLowerCase().includes(query);
+                        }
+                        
+                        if (found) {
+                            results.push({
+                                comp: comp,
+                                groupIdx: groupIdx
+                            });
+                        }
+                    });
+                });
+
+                if (results.length > 0) {
+                    currentView = 'competencies';
+                    selectedGroup = results[0].groupIdx;
+                    
+                    const container = document.getElementById('navigationContainer');
+                    const resultWord = results.length === 1 ? 'компетенция' : 
+                                      results.length < 5 ? 'компетенции' : 'компетенций';
+                    container.innerHTML = `
+                        <div class="navigation-title">🔍 Найдено: ${results.length} ${resultWord}</div>
+                        <div class="competencies-grid" id="searchResults"></div>
+                    `;
+                    
+                    const grid = document.getElementById('searchResults');
+                    results.forEach(result => {
+                        grid.appendChild(createCompetencyCard(result.comp));
+                    });
+                    
+                    updateBreadcrumbs();
+                } else {
+                    // Если ничего не найдено
+                    currentView = 'competencies';
+                    selectedGroup = null;
+                    
+                    const container = document.getElementById('navigationContainer');
+                    container.innerHTML = `
+                        <div class="navigation-title">🔍 По запросу "${query}" ничего не найдено</div>
+                        <div style="text-align: center; padding: 3rem; color: var(--vi-gray);">
+                            <p style="font-size: 1.2rem; margin-bottom: 1rem;">😔 К сожалению, компетенции с таким содержанием не найдены</p>
+                            <p>Попробуйте изменить запрос или <span style="color: var(--vi-red); cursor: pointer; font-weight: 600;" onclick="document.getElementById('searchBox').value=''; showGroups();">вернуться к списку групп</span></p>
+                        </div>
+                    `;
+                    
+                    updateBreadcrumbs();
+                }
+            });
+        }
+
+        showGroups();
+        initSearch();
+    </script>
+</body>
 </html>
